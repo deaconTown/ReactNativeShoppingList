@@ -12,6 +12,18 @@ const App = () => {
     { id: Math.random(), name: 'Eggs', qty: 12 },
     { id: Math.random(), name: 'Juice', qty: 3 }
   ]);
+  const [isEdit, setisEdit] = useState(false);
+
+  const [selectedItem, setselectedItem] = useState({});
+
+  const editItem = (id: any, name: string, qty: string, isEdit: boolean) => {
+    // setItems(prevItems => {
+    //   return prevItems.filter(item => item.id != id);
+    // });
+    setselectedItem({id, name, qty});
+    setisEdit(isEdit);
+    console.log("Edit pressed");
+  };
 
   const deleteItem = (id: any) => {
     setItems(prevItems => {
@@ -46,11 +58,12 @@ const App = () => {
   return (
     <View style={styles.container}>
       <Header />
-      <AddItem addItem={addItem} />
+      <AddItem addItem={addItem} editItem={selectedItem} isEdit={isEdit}/>
       <FlatList data={items} renderItem={({ item }) => (
         <ListItem
           item={item}
           deleteItem={deleteItem}
+          editItem = {editItem}
         />
       )}
         keyExtractor={item => item.id.toString()} />

@@ -7,6 +7,11 @@ const ListItem = (props : any) => {
         <TouchableOpacity style={styles.listItem}>
             <View style={styles.listItemView}>
                 <Text style={styles.listItemText}>Name: {props.item.name},  Amount: {props.item.qty}</Text>
+
+                <Ionicons name="md-create" size={20} color="blue" 
+                onPress = {() => props.editItem(props.item.id, props.item.name, props.item.qty, true)}/> 
+                
+
                 <Ionicons name="md-trash" size={20} color="firebrick" 
                 onPress = {() => props.deleteItem(props.item.id)}/>
             </View>
