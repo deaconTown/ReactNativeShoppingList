@@ -1,12 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, CheckBox } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 const ListItem = (props : any) => {
     return (
         <TouchableOpacity style={styles.listItem}>
             <View style={styles.listItemView}>
-                <Text style={styles.listItemText}>Name: {props.item.name},  Amount: {props.item.qty}</Text>
+                <CheckBox></CheckBox>
+                <Text style={styles.listItemText}>Name: {props.item.name}</Text>
+                <Text style={styles.listItemText}>Amount: {props.item.qty}</Text>
                 <Ionicons name="md-trash" size={20} color="firebrick" 
                 onPress = {() => props.deleteItem(props.item.id)}/>
             </View>
