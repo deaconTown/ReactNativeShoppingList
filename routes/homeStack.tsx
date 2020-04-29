@@ -15,16 +15,28 @@ const Navigator = () => {
            <Stack.Navigator initialRouteName="Home">
                 <Stack.Screen name ='Home' component={ShoppingList} 
                  options={{
+                    headerTitle: "Home",
                     headerRight: () => (
                       <Button
-                        onPress={() => alert('This is a button!')}
-                        title="Info"
-                        color="#fff"
+                        onPress={() => alert('This is the Home button!')}
+                        title="Meals"
+                        color="black"
                       />
                     ),
                   }}
                 />
-                <Stack.Screen name ='Meals' component={Meals}/>
+                <Stack.Screen name ='Meals' component={Meals}
+                 options={{
+                    headerTitle: "Meals",
+                    headerRight: () => (
+                      <Button
+                        onPress={() => alert('This is the Meal button!')}
+                        title="Info"
+                        color="#eee"
+                      />
+                    ),
+                  }}
+                />
            </Stack.Navigator>
        </NavigationContainer>
     )
