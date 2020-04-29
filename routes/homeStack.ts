@@ -2,14 +2,15 @@ import 'react-native-gesture-handler';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createAppContainer} from 'react-navigation';
 import ShoppingList from '../components/ShoppingList/ShoppingList'
+import Meals from '../components/Meals/Meals';
 
 const screens = {
     Home: {
         screen: ShoppingList
     },
-    // Meals: {
-    //     screen: () => {}
-    // }
+    Meals: {
+        screen: Meals
+    }
 }
 
 /* FOR RESOLVING NAVIGATION ISSUE 
