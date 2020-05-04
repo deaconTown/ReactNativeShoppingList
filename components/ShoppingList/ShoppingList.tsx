@@ -46,15 +46,15 @@ const ShippingList = (props : any) => {
     }
   }
 
-  useEffect(() => {
-    fetch('https://www.themealdb.com/api/json/v1/1/search.php?f=a')
-      .then((response) => response.json())
-      .then((json) => setMovie(json.meals))
-      .catch((error) => console.error(error))
-      .finally(() =>  setLoading(false));
-  }, []);
+  // useEffect(() => {
+  //   fetch('https://www.themealdb.com/api/json/v1/1/search.php?f=a')
+  //     .then((response) => response.json())
+  //     .then((json) => setMovie(json.meals))
+  //     .catch((error) => console.error(error))
+  //     .finally(() =>  setLoading(false));
+  // }, []);
 
-  console.log(movie)
+  // console.log(movie)
 
 
   return (
