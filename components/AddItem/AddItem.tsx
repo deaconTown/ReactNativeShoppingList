@@ -17,7 +17,7 @@ const AddItem = (props: any) => {
             autoCapitalize = "words"
             autoCorrect = {true}
             autoCompleteType = "name"
-            autoFocus= {true}
+            // autoFocus= {true}
             keyboardType = "default"
             />
             <TextInput placeholder='Add Item Quantity' 

@@ -59,18 +59,21 @@ const ShippingList = (props : any) => {
 
   return (
     <>
-    <Button title="Meals" onPress={()=> props.navigation.navigate('Meals')}/>
+    {/* <Button title="Meals" onPress={()=> props.navigation.navigate('Meals')}/> */}
     <View style={styles.container}>
       <Header />
+      <View style={styles.body}>
       <AddItem addItem={addItem} />
 
-      <FlatList style={styles.flatList} data={items} renderItem={({ item }) => (
-        <ListItem
-          item={item}
-          deleteItem={deleteItem}
-        />
-      )}
-        keyExtractor={item => item.id.toString()} />
+<FlatList style={styles.flatList} data={items} renderItem={({ item }) => (
+  <ListItem
+    item={item}
+    deleteItem={deleteItem}
+  />
+)}
+  keyExtractor={item => item.id.toString()} />
+      </View>
+      
     </View>
 
     {/* <View style={{ flex: 1, padding: 24 }}>
@@ -93,11 +96,15 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 60,
     minHeight:100,
-    position: 'relative'
+    position: 'relative',
+  },
+  body: {
+    marginTop: 10,
+    padding: 24
   },
   flatList:{
     position: 'relative',
-    display: 'flex'
+    display: 'flex',
   }
 });
 
