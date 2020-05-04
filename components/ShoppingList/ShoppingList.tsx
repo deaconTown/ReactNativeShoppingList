@@ -46,17 +46,6 @@ const ShippingList = (props : any) => {
     }
   }
 
-  // useEffect(() => {
-  //   fetch('https://www.themealdb.com/api/json/v1/1/search.php?f=a')
-  //     .then((response) => response.json())
-  //     .then((json) => setMovie(json.meals))
-  //     .catch((error) => console.error(error))
-  //     .finally(() =>  setLoading(false));
-  // }, []);
-
-  // console.log(movie)
-
-
   return (
     <>
     {/* <Button title="Meals" onPress={()=> props.navigation.navigate('Meals')}/> */}
@@ -75,18 +64,6 @@ const ShippingList = (props : any) => {
       </View>
       
     </View>
-
-    {/* <View style={{ flex: 1, padding: 24 }}>
-      {isLoading ? <ActivityIndicator/> : (
-        <FlatList
-          data={movie}
-          keyExtractor={({ id }, index) => id}
-          renderItem={({ item }) => (
-            <Text>{item.title}, {item.releaseYear}</Text>
-          )}
-        />
-      )}
-    </View> */}
     </>
   )
 };

@@ -1,58 +1,85 @@
-import React, {useState, useEffect} from 'react'
-import { View, FlatList, ActivityIndicator, Text, Image, Linking, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react'
+import { View, FlatList, ActivityIndicator, Text, Image, Linking, StyleSheet, Picker } from 'react-native';
 import axios from 'axios';
 import Header from '../Header/Header';
+import MealHandler from './MealHandler';
 
 export default function Meals() {
-    const [meal, setMeal] = useState([]);
-    const [isLoading, setLoading] = useState(true);
+  const [meal, setMeal] = useState([]);
+  const [isLoading, setLoading] = useState(true);
+  const [filterValue, setFilterValue] = useState('')
+  const mealHandler = new MealHandler();
 
-    //fetching meals by letter a 
-     useEffect(() => {
-          const fetchMeal = async () => {
-            const result = await axios('https://www.themealdb.com/api/json/v1/1/search.php?f=a');
-            setMeal(result.data.meals)
-            
-          };
-          fetchMeal().finally(()=>setLoading(false))
-        }, [])
+  //get list of meal by the firt name
+  useEffect(() => {
+    mealHandler.FilterMealByFirstLetter(filterValue).then((response) => {
+      if (response) {
+        setMeal(response.data.meals)
+        setLoading(false);
+      } 
+    });
+  }, [])
+
+  const updateMealFilter = (itemValue: any) =>{
+    setFilterValue(itemValue)
+    mealHandler.FilterMealByFirstLetter(itemValue).then((response) => {
+      if (response) {
+        setMeal(response.data.meals)
+        setLoading(false);
+      }
+    });
+  }
+ 
+
+  return (
+    <View style={styles.container}>
+      <Header title='Meals' />
+      <View>
+      <Picker
+          selectedValue={filterValue}
+          style={{ height: 50, width: 150 }}
+          onValueChange={(itemValue, itemIndex) => updateMealFilter(itemValue)}
+        >
+          <Picker.Item label="A" value="a" />
+          <Picker.Item label="B" value="b" />
+        </Picker> 
+      </View>
       
 
-    return (
-        // <View style={{ flex: 1, padding: 24 }}>
-        <View style={styles.container}>
-          <Header title='Meals'/>
-      {isLoading ? <ActivityIndicator/> : (
+      {isLoading ?  <ActivityIndicator size="large" color="#0000ff" /> : ( 
+        <>
+         
         <FlatList
-        style ={styles.flatList}
-          data={meal}         
+          style={styles.flatList}
+          data={meal}
           renderItem={({ item }) => (
-              <>
-            <Text>{item.strMeal}</Text>
-            <View>
+            <>
+              <Text>{item.strMeal}</Text>
+              <View>
 
-            <Image source={{uri : item.strMealThumb, height: 300, width: 345}} style={{borderColor: 'black', borderWidth: 1}}/>
-            </View>
-            <Text>{item.strInstructions}</Text>
-            <Text>{item.strTags}</Text>
-            <Text style={{color: 'blue', marginBottom: 50}} onPress={() => Linking.openURL(item.strYoutube)} > YouTube Tutorial</Text>
+                <Image source={{ uri: item.strMealThumb, height: 300, width: 345 }} style={{ borderColor: 'black', borderWidth: 1 }} />
+              </View>
+              <Text>{item.strInstructions}</Text>
+              <Text>{item.strTags}</Text>
+              <Text style={{ color: 'blue', marginBottom: 50 }} onPress={() => Linking.openURL(item.strYoutube)} > YouTube Tutorial</Text>
             </>
           )}
-          keyExtractor={( item , index) => item.idMeal}
+          keyExtractor={(item, index) => item.idMeal}
         />
+        </>
       )}
-    </View> 
-    )
+    </View>
+  )
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 60,
-    minHeight:100,
+    minHeight: 100,
     position: 'relative'
   },
-  flatList:{
+  flatList: {
     marginTop: 10,
     padding: 24
   }
