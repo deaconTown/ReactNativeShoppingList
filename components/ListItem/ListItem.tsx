@@ -15,7 +15,8 @@ const ListItem = (props : any) => {
                 <CheckBox
                 value={isSelected}
                 onChange={()=>setSelection(!isSelected)}
-                ></CheckBox>
+                />
+                
                 <Text style={styles.listItemText}>Name: {props.item.name}</Text>
                 <Text style={styles.listItemText}>Amount: {props.item.qty}</Text>
                 <Ionicons name="md-trash" size={20} color="firebrick" 

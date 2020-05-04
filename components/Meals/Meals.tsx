@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
-import { View, FlatList, ActivityIndicator, Text, Image, Linking,  } from 'react-native';
-import axios from 'axios'
+import { View, FlatList, ActivityIndicator, Text, Image, Linking, StyleSheet } from 'react-native';
+import axios from 'axios';
+import Header from '../Header/Header';
 
 export default function Meals() {
     const [meal, setMeal] = useState([]);
@@ -18,9 +19,12 @@ export default function Meals() {
       
 
     return (
-        <View style={{ flex: 1, padding: 24 }}>
+        // <View style={{ flex: 1, padding: 24 }}>
+        <View style={styles.container}>
+          <Header title='Meals'/>
       {isLoading ? <ActivityIndicator/> : (
         <FlatList
+        style ={styles.flatList}
           data={meal}         
           renderItem={({ item }) => (
               <>
@@ -39,5 +43,17 @@ export default function Meals() {
       )}
     </View> 
     )
-}
+};
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 60,
+    minHeight:100,
+    position: 'relative'
+  },
+  flatList:{
+    marginTop: 10,
+    padding: 24
+  }
+});
