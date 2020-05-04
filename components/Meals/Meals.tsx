@@ -6,12 +6,11 @@ export default function Meals() {
     const [meal, setMeal] = useState([]);
     const [isLoading, setLoading] = useState(true);
 
+    //fetching meals by letter a 
      useEffect(() => {
           const fetchMeal = async () => {
             const result = await axios('https://www.themealdb.com/api/json/v1/1/search.php?f=a');
-            // setMeal(result.data)
             setMeal(result.data.meals)
-            console.log("result.data.meals", result.data.meals)        
             
           };
           fetchMeal().finally(()=>setLoading(false))
