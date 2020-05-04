@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Alert, ActivityIndicator, Button } from 'react-native';
 import Header from '../Header/Header';
 import AddItem from '../AddItem/AddItem';
 import ListItem from '../ListItem/ListItem';
@@ -46,19 +46,20 @@ const ShippingList = (props : any) => {
     }
   }
 
-  useEffect(() => {
-    fetch('https://reactnative.dev/movies.json')
-      .then((response) => response.json())
-      .then((json) => setMovie(json.movies))
-      .catch((error) => console.error(error))
-      .finally(() =>  setLoading(false));
-  }, []);
+  // useEffect(() => {
+  //   fetch('https://www.themealdb.com/api/json/v1/1/search.php?f=a')
+  //     .then((response) => response.json())
+  //     .then((json) => setMovie(json.meals))
+  //     .catch((error) => console.error(error))
+  //     .finally(() =>  setLoading(false));
+  // }, []);
 
-  console.log(movie)
+  // console.log(movie)
 
 
   return (
     <>
+    <Button title="Meals" onPress={()=> props.navigation.navigate('Meals')}/>
     <View style={styles.container}>
       <Header />
       <AddItem addItem={addItem} />
