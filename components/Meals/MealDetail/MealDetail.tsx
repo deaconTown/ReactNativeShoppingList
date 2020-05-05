@@ -1,24 +1,12 @@
-import * as React from "react";
+import * as React from 'react';
+import { View, Text } from 'react-native'
 
-export interface Props {
-    children?: React.ReactNode
-}
+export default function MealDetail(props: any) {
 
-export interface State {
-}
-
-export default class MealDetail extends React.Component<Props, State> {
-
-    constructor(props: Props) {
-        super(props)
-
-        this.state = {
-        }
-    }
-
-    render() {
-        return (
-            <div>{ this.props.children }</div>
-        )
-    }
+    return (
+        <View>
+            <Text> {props.route.params.mealId}</Text>
+            <Text>Hello World</Text>
+        </View>
+    )
 }

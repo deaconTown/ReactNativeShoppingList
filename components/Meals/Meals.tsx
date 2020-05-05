@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { View, FlatList, ActivityIndicator, Text, Image, Linking, StyleSheet, Picker } from 'react-native';
+import { View, FlatList, ActivityIndicator, Text, Image, Linking, StyleSheet, Picker, Button } from 'react-native';
 import axios from 'axios';
 import Header from '../Header/Header';
 import MealHandler from './MealHandler';
 
-export default function Meals() {
+export default function Meals(props: any) {
   const [meal, setMeal] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [filterValue, setFilterValue] = useState('')
@@ -16,11 +16,11 @@ export default function Meals() {
       if (response) {
         setMeal(response.data.meals)
         setLoading(false);
-      } 
+      }
     });
   }, [])
 
-  const updateMealFilter = (itemValue: any) =>{
+  const updateMealFilter = (itemValue: any) => {
     setFilterValue(itemValue)
     mealHandler.FilterMealByFirstLetter(itemValue).then((response) => {
       if (response) {
@@ -29,43 +29,50 @@ export default function Meals() {
       }
     });
   }
- 
+
 
   return (
     <View style={styles.container}>
       <Header title='Meals' />
       <View>
-      <Picker
+        <Picker
           selectedValue={filterValue}
           style={{ height: 50, width: 150 }}
           onValueChange={(itemValue, itemIndex) => updateMealFilter(itemValue)}
         >
           <Picker.Item label="A" value="a" />
           <Picker.Item label="B" value="b" />
-        </Picker> 
+        </Picker>
       </View>
-      
 
-      {isLoading ?  <ActivityIndicator size="large" color="#0000ff" /> : ( 
+
+      {isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : (
         <>
-         
-        <FlatList
-          style={styles.flatList}
-          data={meal}
-          renderItem={({ item }) => (
-            <>
-              <Text>{item.strMeal}</Text>
-              <View>
-
-                <Image source={{ uri: item.strMealThumb, height: 300, width: 345 }} style={{ borderColor: 'black', borderWidth: 1 }} />
-              </View>
-              <Text>{item.strInstructions}</Text>
-              <Text>{item.strTags}</Text>
-              <Text style={{ color: 'blue', marginBottom: 50 }} onPress={() => Linking.openURL(item.strYoutube)} > YouTube Tutorial</Text>
-            </>
-          )}
-          keyExtractor={(item, index) => item.idMeal}
-        />
+          <FlatList
+            style={styles.flatList}
+            data={meal}
+            renderItem={({ item }) => (
+              <>
+                <Text>{item.strMeal}</Text>
+                <View>
+                  <Image source={{ uri: item.strMealThumb, height: 300, width: 345 }} style={{ borderColor: 'black', borderWidth: 1 }} />
+                </View>
+                <Text>{item.strInstructions}</Text>
+                <Text>{item.strTags}</Text>
+                <Text style={{ color: 'blue', marginBottom: 50 }} onPress={() => Linking.openURL(item.strYoutube)} > YouTube Tutorial</Text>
+                <Button
+                  title="Go to Details"
+                  onPress={() => {
+                    /* 1. Navigate to the Details route with params */
+                    props.navigation.navigate('Detail', {
+                      mealId: item.idMeal,
+                    });
+                  }}
+                />
+              </>
+            )}
+            keyExtractor={(item, index) => item.idMeal}
+          />
         </>
       )}
     </View>

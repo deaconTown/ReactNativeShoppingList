@@ -5,13 +5,17 @@ import { uuid } from 'uuidv4';
 import ListItem from './components/ListItem/ListItem';
 import AddItem from './components/AddItem/AddItem';
 // import Navigator from './routes/homeStack/'
-import Navigator from './routes/homeStack';
+import TabNavigator from './routes/TabNavigator';
+import StackNavigator from './routes/StackNavigator';
 
 
 const App = () => {
   
   return (
-   <Navigator/>
+    <View style={styles.container}>
+   {/* <TabNavigator/> */}
+   <StackNavigator/>
+   </View>
   )
 };
 
