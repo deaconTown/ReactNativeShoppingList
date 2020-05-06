@@ -9,13 +9,15 @@ import { Button } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import { MealDetail } from '../components/Meals';
+import StackNavigator from './StackNavigator';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialTopTabNavigator();
 
 const BottomTab = createBottomTabNavigator();
 
-const Navigator = () => {
+const TabNavigator = () => {
   return (
     //  <NavigationContainer>
     //      <Stack.Navigator initialRouteName="Home">
@@ -45,7 +47,7 @@ const Navigator = () => {
     //           />
     //      </Stack.Navigator>
     //  </NavigationContainer>
-    <NavigationContainer>
+    //<NavigationContainer>
       <BottomTab.Navigator
        screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
@@ -71,8 +73,10 @@ const Navigator = () => {
         <BottomTab.Screen name="Shopping" component={ShoppingList} />
         <BottomTab.Screen name="Meals" component={Meals} />
       </BottomTab.Navigator>
-    </NavigationContainer>
+    //</NavigationContainer>
   )
 }
 
-export default Navigator;
+export default TabNavigator;
+
+
