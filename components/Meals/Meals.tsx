@@ -30,9 +30,15 @@ export default function Meals(props: any) {
       }
     });
   }
+
+  //TODO: 
+    // VirtualizedList: You have a large list that is slow to update - make sure your renderItem function renders components that follow React performance best practices like PureComponent, shoulactices like PureComponent, shouldComponentUpdate, etc. Object {
+      //   "contentLength": 7152,
+      //   "dt": 4342,
+      //   "prevDt": 3593,
+      // }
  
-  return (
-   
+  return (   
     <View style={styles.container}>
       <Header title='Meals' />
       <TouchableOpacity >

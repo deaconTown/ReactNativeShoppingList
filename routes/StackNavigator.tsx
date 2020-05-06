@@ -21,9 +21,10 @@ const StackNavigator = () => {
     return (
         <NavigationContainer>
             <Stack.Navigator >
-                <Stack.Screen name=" " component={TabNavigator}  options={{headerShown:false}}/>
+                <Stack.Screen name="Home" component={TabNavigator}  options={{headerShown:false}}/>
                 <Stack.Screen name='Meal' component={Meals} />
                 <Stack.Screen name='Detail' component={MealDetail} />
+                <Stack.Screen name='ShoppingList' component={ShoppingList} />
             </Stack.Navigator>
         </NavigationContainer>
     )

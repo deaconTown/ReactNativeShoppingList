@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ActivityIndicator, FlatList, StyleSheet, Image, Linking } from 'react-native'
+import { View, Text, ActivityIndicator, FlatList, StyleSheet, Image, Linking, Button } from 'react-native'
 import MealHandler from '../MealHandler';
 
 
@@ -17,11 +17,11 @@ export default function MealDetail(props: any) {
             if (response) {
                 setMeal(response.data.meals)
                 setLoading(false);
-                
+
                 getIngredientsList(response.data.meals);
             }
         });
-    }, []) 
+    }, [])
 
     const getIngredientsList = (meal: []) => {
         //create temp array to store ingredient names and measurement
@@ -40,7 +40,7 @@ export default function MealDetail(props: any) {
             ingredientKey.forEach(element => {
                 if (x[element]) {
                     tempIngr.push(x[element]);
-                } 
+                }
             });
             //set IngredientNames state ~ might need it at some point //TODO: remove if found not needed
             setIngredientNames(tempIngr);
@@ -57,7 +57,7 @@ export default function MealDetail(props: any) {
 
         //concat IngredientNames & Measurements, then set Ingredient state to use in flatlist
         var temp: string[] = [];
-        for(var i = 0; i < tempIngr.length; i++){
+        for (var i = 0; i < tempIngr.length; i++) {
             temp.push(tempIngr[i].concat(' ').concat(tempMeasurement[i]))
         }
         // console.log("ingredients", temp) 
@@ -95,10 +95,20 @@ export default function MealDetail(props: any) {
                                         <Text>{item}</Text>
                                     )}
                                     keyExtractor={(item, index) => item.strIngredient1}
-                                /> 
+                                />
 
                                 {/* Youtube link: */}
-                                <Text  style={{ color: 'blue', marginBottom: 50, marginTop: 3 }} onPress={() => Linking.openURL(item.strYoutube)} > YouTube Tutorial</Text>
+                                <Text style={{ color: 'blue', marginBottom: 50, marginTop: 3 }} onPress={() => Linking.openURL(item.strYoutube)} > YouTube Tutorial</Text>
+                                <Button
+                                    title="Create New Shopping List"
+                                    onPress={() => {
+                                        /* 1. Navigate to the ShoppingList route with params */
+                                        props.navigation.navigate('ShoppingList', {
+                                            ingredientNames: ingredientNames,
+                                            measurement : measurements
+                                        });
+                                    }}
+                                />
                             </>
                         )}
                         keyExtractor={(item, index) => item.idMeal}
@@ -126,7 +136,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         // padding: 24
     },
-    text:{
+    text: {
         marginTop: 3,
     }
 });
