@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, FlatList, ActivityIndicator, Text, Image, Linking, StyleSheet, Picker, Button } from 'react-native';
+import { View, FlatList, ActivityIndicator, Text, Image, Linking, StyleSheet, Picker, Button, TouchableOpacity } from 'react-native';
 import Header from '../Header/Header';
 import MealHandler from './MealHandler';
 import alphabet from './alphabet.json'
@@ -32,8 +32,10 @@ export default function Meals(props: any) {
   }
  
   return (
+   
     <View style={styles.container}>
       <Header title='Meals' />
+      <TouchableOpacity >
       <View>
         <Picker
           selectedValue={filterValue == ''? 'A': filterValue}
@@ -45,14 +47,13 @@ export default function Meals(props: any) {
           })}
         </Picker>
       </View>
-
+      </TouchableOpacity>
 
       {isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : (
         <>
           <FlatList
             style={styles.flatList}
             data={meals}
-            initialNumToRender={5}
             renderItem={({ item }) => (
               <>
                 <Text style={{marginTop: 30, marginBottom: 1, }}>Name: {item.strMeal}</Text>
@@ -76,6 +77,7 @@ export default function Meals(props: any) {
         </>
       )}
     </View>
+    
   )
 };
 
@@ -89,7 +91,7 @@ const styles = StyleSheet.create({
   flatList: {
     // marginTop: 10,
     padding: 24,
-    // paddingBottom:50
+    paddingBottom:50
   },
   text: {
     marginTop: 30,
