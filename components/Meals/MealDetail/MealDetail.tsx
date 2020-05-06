@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ActivityIndicator, FlatList, StyleSheet, Image } from 'react-native'
+import { View, Text, ActivityIndicator, FlatList, StyleSheet, Image, Linking } from 'react-native'
 import MealHandler from '../MealHandler';
 
 
 export default function MealDetail(props: any) {
     const [meal, setMeal] = useState([]);
-    const [ingredients, setIngredients] = useState(['']);
+    const [ingredientNames, setIngredientNames] = useState(['']);
     const [measurements, setMeasurements] = useState(['']);
-    const [ingrAmount, setIngrAmount] = useState(0);
+    const [ingredients, setIngredients] = useState(['']);
     const [isLoading, setLoading] = useState(true);
     const mealHandler = new MealHandler();
-    // const str = Object(strIngredient1);
 
     //get meal by id
     useEffect(() => {
@@ -18,52 +17,51 @@ export default function MealDetail(props: any) {
             if (response) {
                 setMeal(response.data.meals)
                 setLoading(false);
-
-                //place ingredients & measurement in a separate array
-                getIngredients(response.data.meals);
-                getMeasurements(response.data.meals);
-               
+                
+                getIngredientsList(response.data.meals);
             }
         });
-    }, [])
+    }, []) 
 
-    const getIngredients = (meal: []) => {
+    const getIngredientsList = (meal: []) => {
+        //create temp array to store ingredient names and measurement
+        var tempIngr: string[] = [];
+        var tempMeasurement: string[] = [];
+
         meal.map((x) => {
-            const key = Object.keys(x); 
-            console.log("Ingredients test") 
+            //get meal keys
+            const key = Object.keys(x);
+
+            //filter to get ingredient and measurement keys only
             var ingredientKey = key.filter(i => i.includes("strIngredient"));
-            var tempIngr: string[] = [];
-
-            ingredientKey.forEach(element => {
-                // console.log("element", element)
-                // tempIngr = x[element].filter(x => x != )
-                if(x[element]){
-                    // console.log("x[element]", x[element])
-                    tempIngr.push(x[element]);
-                }
-            });                    
-            setIngredients(tempIngr);
-            console.log("ingredients", ingredients)
-        })
-    }
-    
-    const getMeasurements = (meal: []) => {
-        meal.map((x) => {
-            const key = Object.keys(x); 
-            console.log("Measurement test") 
-
-            var tempMeasurement: string[] = [];
-
             var measurementKey = key.filter(i => i.includes("strMeasure"));
+
+            //add ingredientName to temp array if value is not null
+            ingredientKey.forEach(element => {
+                if (x[element]) {
+                    tempIngr.push(x[element]);
+                } 
+            });
+            //set IngredientNames state ~ might need it at some point //TODO: remove if found not needed
+            setIngredientNames(tempIngr);
+
+            //add measurement to temp array if value is not null
             measurementKey.forEach(element => {
-                if(x[element]){
-                    // console.log("x[element]", x[element])
+                if (x[element]) {
                     tempMeasurement.push(x[element]);
                 }
             });
+            //set Measurements state ~ might need it at some point //TODO: remove if found not needed
             setMeasurements(tempMeasurement)
-            console.log("measurements", measurements)
         })
+
+        //concat IngredientNames & Measurements, then set Ingredient state to use in flatlist
+        var temp: string[] = [];
+        for(var i = 0; i < tempIngr.length; i++){
+            temp.push(tempIngr[i].concat(' ').concat(tempMeasurement[i]))
+        }
+        // console.log("ingredients", temp) 
+        setIngredients(temp);
     }
 
     return (
@@ -76,44 +74,31 @@ export default function MealDetail(props: any) {
                         renderItem={({ item }) => (
                             <>
                                 {/* TODO: The Id should be removed before "Production" */}
-                                <Text>Meal Id: {item.idMeal}</Text>
-                                <Text>Meal Name: {item.strMeal}</Text>
-                                <Text>Meal Area: {item.strArea}</Text>
-                                <Text>Category: {item.strCategory}</Text>
-                                <Text>Tags: {item.strTags}</Text>
+                                <Text style={styles.text}>Meal Id: {item.idMeal}</Text>
+                                <Text style={styles.text}>Meal Name: {item.strMeal}</Text>
+                                <Text style={styles.text}>Meal Area: {item.strArea}</Text>
+                                <Text style={styles.text}>Category: {item.strCategory}</Text>
+                                <Text style={styles.text}>Tags: {item.strTags}</Text>
                                 <View>
                                     <Image source={{ uri: item.strMealThumb, height: 300, width: 345 }} style={{ borderColor: 'black', borderWidth: 1 }} />
                                 </View>
                                 {/* Instructions */}
-                                <Text>Instructions:</Text>
-                                <Text>{item.strInstructions}</Text>
+                                <Text style={styles.text}>Instructions:</Text>
+                                <Text style={styles.text}>{item.strInstructions}</Text>
 
                                 {/* Ingredients */}
-                                <Text>Ingredients</Text>
-                                <Text>{item['strIngredient1']} {item.strMeasure1}</Text>
-                                <Text>{item.strIngredient2} {item.strMeasure2}</Text>
-                                <Text>{item.strIngredient3} {item.strMeasure3}</Text>
-                                <Text>{item.strIngredient4} {item.strMeasure4}</Text>
-                                <Text>{item.strIngredient5} {item.strMeasure5}</Text>
-                                <Text>{item.strIngredient6} {item.strMeasure6}</Text>
-                                <Text>{item.strIngredient7} {item.strMeasure7}</Text>
-                                <Text>{item.strIngredient8} {item.strMeasure8}</Text>
-                                <Text>{item.strIngredient9} {item.strMeasure9}</Text>
-                                <Text>{item.strIngredient10} {item.strMeasure10}</Text>
-                                <Text>{item.strIngredient11} {item.strMeasure11}</Text>
-                                <Text>{item.strIngredient12} {item.strMeasure12}</Text>
-                                <Text>{item.strIngredient13} {item.strMeasure13}</Text>
-                                <Text>{item.strIngredient14} {item.strMeasure14}</Text>
-                                <Text>{item.strIngredient14} {item.strMeasure14}</Text>
-                                <Text>{item.strIngredient15} {item.strMeasure15}</Text>
-                                <Text>{item.strIngredient16} {item.strMeasure16}</Text>
-                                <Text>{item.strIngredient17} {item.strMeasure17}</Text>
-                                <Text>{item.strIngredient18} {item.strMeasure18}</Text>
-                                <Text>{item.strIngredient19} {item.strMeasure19}</Text>
-                                <Text>{item.strIngredient20} {item.strMeasure20}</Text>
+                                <Text style={styles.text}>Ingredients:</Text>
+                                <FlatList
+                                    style={styles.ingredientFlatList}
+                                    data={ingredients}
+                                    renderItem={({ item }) => (
+                                        <Text>{item}</Text>
+                                    )}
+                                    keyExtractor={(item, index) => item.strIngredient1}
+                                /> 
 
                                 {/* Youtube link: */}
-                                <Text style={{ color: 'blue', marginBottom: 50 }} onPress={() => Linking.openURL(item.strYoutube)} > YouTube Tutorial</Text>
+                                <Text  style={{ color: 'blue', marginBottom: 50, marginTop: 3 }} onPress={() => Linking.openURL(item.strYoutube)} > YouTube Tutorial</Text>
                             </>
                         )}
                         keyExtractor={(item, index) => item.idMeal}
@@ -135,5 +120,13 @@ const styles = StyleSheet.create({
     flatList: {
         marginTop: 10,
         padding: 24
+    },
+    ingredientFlatList: {
+        marginTop: 2,
+        marginBottom: 10,
+        // padding: 24
+    },
+    text:{
+        marginTop: 3,
     }
 });
