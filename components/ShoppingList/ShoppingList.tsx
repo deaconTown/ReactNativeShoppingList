@@ -46,6 +46,11 @@ const ShippingList = (props : any) => {
     }
   }
 
+  const createNewList = () => {
+    props.route.params.ingredientNames
+    props.route.params.measurements
+  } 
+
   return (
     <>
     {/* <Button title="Meals" onPress={()=> props.navigation.navigate('Meals')}/> */}
