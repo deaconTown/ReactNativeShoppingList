@@ -5,7 +5,7 @@ import Header from '../Header/Header';
 import MealHandler from './MealHandler';
 
 export default function Meals(props: any) {
-  const [meal, setMeal] = useState([]);
+  const [meals, setMeals] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [filterValue, setFilterValue] = useState('')
   const mealHandler = new MealHandler();
@@ -14,7 +14,7 @@ export default function Meals(props: any) {
   useEffect(() => {
     mealHandler.FilterMealByFirstLetter(filterValue).then((response) => {
       if (response) {
-        setMeal(response.data.meals)
+        setMeals(response.data.meals)
         setLoading(false);
       }
     });
@@ -24,7 +24,7 @@ export default function Meals(props: any) {
     setFilterValue(itemValue)
     mealHandler.FilterMealByFirstLetter(itemValue).then((response) => {
       if (response) {
-        setMeal(response.data.meals)
+        setMeals(response.data.meals)
         setLoading(false);
       }
     });
@@ -50,7 +50,7 @@ export default function Meals(props: any) {
         <>
           <FlatList
             style={styles.flatList}
-            data={meal}
+            data={meals}
             renderItem={({ item }) => (
               <>
                 <Text>{item.strMeal}</Text>
