@@ -5,13 +5,15 @@ import AddItem from '../AddItem/AddItem';
 import AddList from './AddList';
 import ListItem from './ListItem/ListItem';
 
-const ShoppingList = (props: any) => {
+export default function  ShoppingList(props: any){
   const [items, setItems] = useState([
     { id: Math.random(), name: 'Milk', qty: 1 },
     { id: Math.random(), name: 'Bread2', qty: 2 },
     { id: Math.random(), name: 'Eggs', qty: 12 },
     { id: Math.random(), name: 'Juice', qty: 3 }
   ]);
+  const [content, setContent] = useState();
+  const [fromMealList, setfromMealList] = useState(false);
 
   const [list, setList] = useState({
     list1: {
@@ -36,20 +38,81 @@ const ShoppingList = (props: any) => {
         ]
     }
   });
-  7
+
   const [isLoading, setLoading] = useState(true);
 
   const deleteItem = (id: any) => {
     setItems(prevItems => {
       return prevItems.filter(item => item.id != id);
     });
-  }; 
+  };
 
   const itemExists = (name: string) => {
     return items.some(function (item) {
       return item.name.toUpperCase() === name.toUpperCase();
     });
   }
+
+
+  // setPerson(prevPerson => {
+  //   return { 
+  //     ...prevPerson, 
+  //     age: prevPerson.age + 1 
+  //   }
+  // })
+
+
+  const createContent = () => {
+    var name = [] = [];
+    var qty = [] = [];
+    var tempContent = [];
+    if (props.route.params !== undefined) {
+      props.route.params.ingredientName.map((x) => {
+        name.push(x);
+      })
+      props.route.params.measurement.map((x) => {
+        qty.push(x);
+      })
+    }
+
+    for (let index = 0; index < name.length; index++) {
+      const n = name[index];
+      const q = qty[index];
+      tempContent.push({ id: Math.random(), name: n, qty: q });
+
+    }
+    console.log(tempContent)
+    // setContent(tempContent)
+    
+    addNewList(tempContent);
+  };
+
+  const addNewList = (content: any) => {
+    if (props.route.params !== undefined) {
+      setList(previousList => {
+        return {
+          ...previousList,
+          list3: {
+            id: Math.random(),
+            name: props.route.params.mealName,
+            content:content //this is not the state
+          }
+        }
+      })
+    }
+  }
+
+
+  useEffect(() => {
+
+    if (props.route.params !== undefined) {
+      setfromMealList(true)
+    }
+
+    createContent()
+
+  }, []);
+
 
   const addItem = (text: string, qty: number) => {
     if (itemExists(text)) {
@@ -76,11 +139,10 @@ const ShoppingList = (props: any) => {
         <Header />
         <View style={styles.body}>
           <AddItem addItem={addItem} />
-
           {Object.keys(list).map((item, _key) => {
             var listItem = list[item]
             var content = listItem['content']
-            return <AddList data={content} title={listItem['name']} />
+            return <AddList data={content} title={listItem['name']} fromMealList={fromMealList}/>
           })}
         </View>
       </ScrollView>
@@ -104,5 +166,3 @@ const styles = StyleSheet.create({
     display: 'flex',
   }
 });
-
-export default ShoppingList;

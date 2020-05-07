@@ -110,6 +110,8 @@ export default function MealDetail(props: any) {
                                             measurement: measurements,
                                             ingredient: ingredients,
                                             ingredientName: ingredientNames,
+                                            mealName: item.strMeal,
+                                            newShoppingList: true
                                         });
                                     }}
                                 />

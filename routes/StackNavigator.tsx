@@ -11,6 +11,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import TabNavigator from './TabNavigator';
 import MealDetail from '../components/Meals/MealDetail/MealDetail';
+import { AddList } from '../components/ShoppingList';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialTopTabNavigator();
@@ -25,6 +26,7 @@ const StackNavigator = () => {
                 <Stack.Screen name='Meal' component={Meals} />
                 <Stack.Screen name='Detail' component={MealDetail} />
                 <Stack.Screen name='ShoppingList' component={ShoppingList} />
+                <Stack.Screen name='AddList' component={AddList} />
             </Stack.Navigator>
         </NavigationContainer>
     )

@@ -2,6 +2,7 @@ import * as React from "react";
 import { FlatList, StyleSheet, TouchableOpacity, Text, View } from "react-native";
 import { useState, useEffect } from "react";
 import ListItem from "../ListItem/ListItem";
+import { Ionicons } from '@expo/vector-icons';
 
 export default function AddList(props: any) {
     const [toggleList, setToggleList] = useState(false);
@@ -9,13 +10,27 @@ export default function AddList(props: any) {
 
     useEffect(() => {
         setItems(props.data)
-    },[])
+    }, [])
 
     const Title = () => {
         return (
             <TouchableOpacity style={styles.btn} onPress={() => setToggleList(!toggleList)}>
-                <Text style={styles.btnText}>
-                    {props.title}
+                <Text style={props.fromMealList ? styles.btnTextWithIcon : styles.btnText}>{props.title} </Text>
+                <Text>
+                    {props.fromMealList ?
+                        <>
+                            <Text>
+                                <Ionicons name="md-checkmark-circle-outline" size={20} color="firebrick"
+                                    onPress={() => props.navigation.navigate('Home')} />
+                            </Text>
+                            <Text>
+                                <Ionicons name="md-close" size={20} color="firebrick"
+                                    onPress={() => { }} />
+                            </Text>
+                        </>
+                        :
+                        <Text > </Text>
+                    }
                 </Text>
             </TouchableOpacity>
         )
@@ -23,9 +38,9 @@ export default function AddList(props: any) {
 
     const deleteItem = (id: any) => {
         setItems(prevItems => {
-          return prevItems.filter(item => item.id != id);
+            return prevItems.filter(item => item.id != id);
         });
-      }; 
+    };
 
     return (
         <>
@@ -66,6 +81,11 @@ const styles = StyleSheet.create({
         color: 'darkslateblue',
         fontSize: 20,
         textAlign: 'center'
+    },
+    btnTextWithIcon: {
+        color: 'darkslateblue',
+        fontSize: 20,
+        textAlign: 'left'
     },
     btn: {
         backgroundColor: '#c2bad8',
