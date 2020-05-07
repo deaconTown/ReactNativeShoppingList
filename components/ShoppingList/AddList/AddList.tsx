@@ -1,11 +1,15 @@
 import * as React from "react";
 import { FlatList, StyleSheet, TouchableOpacity, Text, View } from "react-native";
-import ListItem from "../../ListItem/ListItem";
-import Accordion from "react-native-collapsible/Accordion";
 import { useState, useEffect } from "react";
+import ListItem from "../ListItem/ListItem";
 
 export default function AddList(props: any) {
-    const [toggleList, setToggleList] = useState(false)
+    const [toggleList, setToggleList] = useState(false);
+    const [items, setItems] = useState([]);
+
+    useEffect(() => {
+        setItems(props.data)
+    },[])
 
     const Title = () => {
         return (
@@ -17,15 +21,21 @@ export default function AddList(props: any) {
         )
     }
 
+    const deleteItem = (id: any) => {
+        setItems(prevItems => {
+          return prevItems.filter(item => item.id != id);
+        });
+      }; 
+
     return (
         <>
             {Title()}
             {toggleList ?
                 <View>
-                    <FlatList style={styles.flatList} data={props.data} renderItem={({ item }) => (
+                    <FlatList style={styles.flatList} data={items} renderItem={({ item }) => (
                         <ListItem
                             item={item}
-                            deleteItem={props.deleteItem}
+                            deleteItem={deleteItem}
                         />
                     )}
                         keyExtractor={item => item.id} />

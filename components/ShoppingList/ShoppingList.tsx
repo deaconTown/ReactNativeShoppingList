@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Alert, ActivityIndicator, Button, TouchableOpacity, ScrollView } from 'react-native';
 import Header from '../Header/Header';
 import AddItem from '../AddItem/AddItem';
-import ListItem from '../ListItem/ListItem';
 import AddList from './AddList';
+import ListItem from './ListItem/ListItem';
 
 const ShoppingList = (props: any) => {
   const [items, setItems] = useState([
@@ -12,7 +12,7 @@ const ShoppingList = (props: any) => {
     { id: Math.random(), name: 'Eggs', qty: 12 },
     { id: Math.random(), name: 'Juice', qty: 3 }
   ]);
-  
+
   const [list, setList] = useState({
     list1: {
       id: Math.random(),
@@ -23,7 +23,7 @@ const ShoppingList = (props: any) => {
         { id: Math.random(), name: 'Eggs', qty: 12 },
         { id: Math.random(), name: 'Juice', qty: 3 }
       ]
-    }, 
+    },
     list2: {
       id: Math.random(),
       name: 'List 2',
@@ -36,14 +36,14 @@ const ShoppingList = (props: any) => {
         ]
     }
   });
-7
+  7
   const [isLoading, setLoading] = useState(true);
 
   const deleteItem = (id: any) => {
     setItems(prevItems => {
       return prevItems.filter(item => item.id != id);
     });
-  };
+  }; 
 
   const itemExists = (name: string) => {
     return items.some(function (item) {
@@ -69,18 +69,6 @@ const ShoppingList = (props: any) => {
     }
   }
 
-  const createNewList = () => {
-    if (props.route.params) {
-      return <FlatList style={styles.flatList} data={props.route.params.ingredientName} renderItem={({ item }) => (
-        <ListItem
-          item={item}
-          deleteItem={deleteItem}
-        />
-      )}
-        keyExtractor={item => item.id.toString()} />
-    }
-  }
-//TODO: DELETE NO LONGER WORKING
   return (
     <>
       {/* <Button title="Meals" onPress={()=> props.navigation.navigate('Meals')}/> */}
@@ -89,11 +77,11 @@ const ShoppingList = (props: any) => {
         <View style={styles.body}>
           <AddItem addItem={addItem} />
 
-        {Object.keys(list).map((item, _key) => {
-          var listItem = list[item]
-          var content = listItem['content']
-          return <AddList data= {content} deleteItem={deleteItem} title={listItem['name']}/>
-        })}
+          {Object.keys(list).map((item, _key) => {
+            var listItem = list[item]
+            var content = listItem['content']
+            return <AddList data={content} title={listItem['name']} />
+          })}
         </View>
       </ScrollView>
     </>

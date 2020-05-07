@@ -2,7 +2,7 @@ import React, { useState,useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Alert, ActivityIndicator } from 'react-native';
 import Header from './components/Header/Header';
 import { uuid } from 'uuidv4';
-import ListItem from './components/ListItem/ListItem';
+import ListItem from './components/ShoppingList/ListItem/ListItem';
 import AddItem from './components/AddItem/AddItem';
 // import Navigator from './routes/homeStack/'
 import TabNavigator from './routes/TabNavigator';
