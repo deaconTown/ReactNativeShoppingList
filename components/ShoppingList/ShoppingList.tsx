@@ -3,47 +3,17 @@ import { View, Text, StyleSheet, FlatList, Alert, ActivityIndicator, Button, Tou
 import Header from '../Header/Header';
 import AddItem from '../AddItem/AddItem';
 import ListItem from '../ListItem/ListItem';
-import * as Animatable from 'react-native-animatable';
-import Collapsible from 'react-native-collapsible';
-import Accordion from 'react-native-collapsible/Accordion';
+import AddList from './AddList';
 
-const ShippingList = (props: any) => {
+const ShoppingList = (props: any) => {
   const [items, setItems] = useState([
     { id: Math.random(), name: 'Milk', qty: 1 },
     { id: Math.random(), name: 'Bread2', qty: 2 },
     { id: Math.random(), name: 'Eggs', qty: 12 },
     { id: Math.random(), name: 'Juice', qty: 3 }
   ]);
-  const [collapsed, setCollapsed] = useState(true);
-  const toggleExpanded = () => {
-    //Toggling the state of single Collapsible
-    setCollapsed(!collapsed);
-  };
-  const [list, setList] = useState([
-    [
-      // `${Math.random()}`,
-      { id: Math.random(), name: 'Milk', qty: 1 },
-      { id: Math.random(), name: 'Bread2', qty: 2 },
-      { id: Math.random(), name: 'Eggs', qty: 12 },
-      { id: Math.random(), name: 'Juice', qty: 3 }
-    ],
-    [
-      // `${Math.random()}`,
-      { id: Math.random(), name: 'Bree', qty: 1 },
-      { id: Math.random(), name: 'Ghee', qty: 2 },
-      { id: Math.random(), name: 'Mouse', qty: 12 },
-      { id: Math.random(), name: 'Baking Soda', qty: 3 }
-    ]
-  ]);
-
-  const content = {
-    title: '',
-    content: list
-  }
-
-  // console.log(shoppingList)
-  const a = 
-    {
+  
+  const [list, setList] = useState({
     list1: {
       id: Math.random(),
       name: 'List 1',
@@ -65,16 +35,8 @@ const ShippingList = (props: any) => {
           { id: Math.random(), name: 'Baking Soda', qty: 3 }
         ]
     }
-  }
-
-// console.log(a)
-
-// a.map((s,i) => {
-//   console.log(s.list1)
-// })
-// console.log()
-
-  const [movie, setMovie] = useState([]);
+  });
+7
   const [isLoading, setLoading] = useState(true);
 
   const deleteItem = (id: any) => {
@@ -107,11 +69,6 @@ const ShippingList = (props: any) => {
     }
   }
 
-  // console.log("ingredientNames", props.route.params == undefined ? "dont" : props.route.params.ingredientName)
-  // // console.log("measurements",props.route.params.measurement)
-  // console.log(props.navigation)
-  // console.log(props.route)
-
   const createNewList = () => {
     if (props.route.params) {
       return <FlatList style={styles.flatList} data={props.route.params.ingredientName} renderItem={({ item }) => (
@@ -127,60 +84,18 @@ const ShippingList = (props: any) => {
   return (
     <>
       {/* <Button title="Meals" onPress={()=> props.navigation.navigate('Meals')}/> */}
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <Header />
         <View style={styles.body}>
           <AddItem addItem={addItem} />
-          {list.map((x) => {
-            // console.log(x)
-            return (
-              <>
-                <TouchableOpacity onPress={toggleExpanded}>
-                  <View >
-                    <Text >Shopping List</Text>
-                    {/*Heading of Single Collapsible*/}
-                  </View>
-                </TouchableOpacity>
-                <Collapsible collapsed={collapsed} align="center">
-                  <FlatList style={styles.flatList} data={x} renderItem={({ item }) => (
-                    <ListItem
-                      item={item}
-                      deleteItem={deleteItem}
-                    />
-                  )}
-                    keyExtractor={item => item.id.toString()} />
-                </Collapsible>
-              </>
-            )
-          })}
 
-        {Object.keys(a).map((list, _key) => {
-          var b = a[list]
-          // console.log(b)
-          console.log(b['content'])
-          var c = b['content']
-          
-          // console.log(l[k]['id'])
-          // console.log(l[k]['content'])
-          // var arr = l[k]['content']
-          return <FlatList style={styles.flatList} data={c} renderItem={({ item }) => (
-            <ListItem
-              item={item}
-              deleteItem={deleteItem}
-            />
-          )}
-            keyExtractor={item => item.id} />
+        {Object.keys(list).map((item, _key) => {
+          var listItem = list[item]
+          var content = listItem['content']
+          return <AddList data= {content} deleteItem={deleteItem} title={listItem['name']}/>
         })}
-          {/* <FlatList style={styles.flatList} data={items} renderItem={({ item }) => (
-            <ListItem
-              item={item}
-              deleteItem={deleteItem}
-            />
-          )}
-            keyExtractor={item => item.id.toString()} /> */}
         </View>
-
-      </View>
+      </ScrollView>
     </>
   )
 };
@@ -202,4 +117,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ShippingList;
+export default ShoppingList;

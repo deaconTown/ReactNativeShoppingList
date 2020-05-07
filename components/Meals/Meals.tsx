@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, FlatList, ActivityIndicator, Text, Image, Linking, StyleSheet, Picker, Button, TouchableOpacity } from 'react-native';
+import { View, FlatList, ActivityIndicator, Text, Image, Linking, StyleSheet, Picker, Button, TouchableOpacity, ScrollView } from 'react-native';
 import Header from '../Header/Header';
 import MealHandler from './MealHandler';
 import alphabet from './alphabet.json'
@@ -15,6 +15,7 @@ export default function Meals(props: any) {
     mealHandler.FilterMealByFirstLetter("a").then((response) => {
       if (response) {
         setMeals(response.data.meals)
+        setFilterValue('A')
         setLoading(false);
       }
     });
@@ -35,17 +36,17 @@ export default function Meals(props: any) {
   //TODO: 
     // VirtualizedList: You have a large list that is slow to update - make sure your renderItem function renders components that follow React performance best practices like PureComponent, shoulactices like PureComponent, shouldComponentUpdate, etc. Object {
       //   "contentLength": 7152,
-      //   "dt": 4342,
-      //   "prevDt": 3593,
-      // }
- 
+      //   "dt": 4342,  
+      //   "prevDt": 3593, 
+      // } 
+ console.log(filterValue)
   return (   
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Header title='Meals' />
       <TouchableOpacity >
       <View>
         <Picker
-          selectedValue={filterValue == ''? 'A': filterValue}
+          selectedValue={filterValue}
           style={{ height: 50, width: 150 }}
           onValueChange={(itemValue, itemIndex) => updateMealFilter(itemValue)}
         >
@@ -53,6 +54,7 @@ export default function Meals(props: any) {
             return <Picker.Item key={i} label={s} value={s} />
           })}
         </Picker>
+        <Button title="Reset" onPress={()=>{}}/> 
       </View>
       </TouchableOpacity>
 
@@ -83,7 +85,7 @@ export default function Meals(props: any) {
           />
         </>
       )}
-    </View>
+    </ScrollView>
     
   )
 };

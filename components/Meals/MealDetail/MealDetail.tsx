@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ActivityIndicator, FlatList, StyleSheet, Image, Linking, Button } from 'react-native'
+import { View, Text, ActivityIndicator, FlatList, StyleSheet, Image, Linking, Button, ScrollView } from 'react-native'
 import MealHandler from '../MealHandler';
 
 
@@ -68,7 +68,7 @@ export default function MealDetail(props: any) {
     }
 
     return (
-        <View>
+        <ScrollView>
             {isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : (
                 <>
                     <FlatList
@@ -103,7 +103,7 @@ export default function MealDetail(props: any) {
                                 {/* Youtube link: */}
                                 <Text style={{ color: 'blue', marginBottom: 50, marginTop: 3 }} onPress={() => Linking.openURL(item.strYoutube)} > YouTube Tutorial</Text>
                                 <Button
-                                    title="Add New ShoppingList"
+                                    title="Send To ShoppingList"
                                     onPress={() => {
                                         /* 1. Navigate to the Details route with params */
                                         props.navigation.navigate('ShoppingList', {
@@ -119,7 +119,7 @@ export default function MealDetail(props: any) {
                     />
                 </>
             )}
-        </View>
+        </ScrollView>
     )
 }
 
