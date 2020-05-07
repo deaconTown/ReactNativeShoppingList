@@ -23,6 +23,9 @@ export default function MealDetail(props: any) {
         });
     }, [])
 
+    // console.log(props.navigation)
+    // console.log(props.route)
+
     const getIngredientsList = (meal: []) => {
         //create temp array to store ingredient names and measurement
         var tempIngr: string[] = [];
@@ -100,12 +103,13 @@ export default function MealDetail(props: any) {
                                 {/* Youtube link: */}
                                 <Text style={{ color: 'blue', marginBottom: 50, marginTop: 3 }} onPress={() => Linking.openURL(item.strYoutube)} > YouTube Tutorial</Text>
                                 <Button
-                                    title="Create New Shopping List"
+                                    title="Add New ShoppingList"
                                     onPress={() => {
-                                        /* 1. Navigate to the ShoppingList route with params */
+                                        /* 1. Navigate to the Details route with params */
                                         props.navigation.navigate('ShoppingList', {
-                                            ingredientNames: ingredientNames,
-                                            measurement : measurements
+                                            measurement: measurements,
+                                            ingredient: ingredients,
+                                            ingredientName: ingredientNames,
                                         });
                                     }}
                                 />

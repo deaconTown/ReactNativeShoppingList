@@ -19,6 +19,7 @@ export default function Meals(props: any) {
       }
     });
   }, [])
+  
 
   const updateMealFilter = (itemValue: any) => {
     setFilterValue(itemValue)
