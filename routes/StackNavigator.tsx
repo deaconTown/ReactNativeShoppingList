@@ -10,7 +10,9 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import TabNavigator from './TabNavigator';
+import DrawerNavigator from './DrawerNavigator';
 import MealDetail from '../components/Meals/MealDetail/MealDetail';
+import { SearchMealByName } from '../components/Meals';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialTopTabNavigator();
@@ -21,9 +23,9 @@ const StackNavigator = () => {
     return (
         <NavigationContainer>
             <Stack.Navigator >
-                <Stack.Screen name=" " component={TabNavigator}  options={{headerShown:false}}/>
-                <Stack.Screen name='Meal' component={Meals} />
-                <Stack.Screen name='Detail' component={MealDetail} />
+                <Stack.Screen name='Home' component={TabNavigator}  options={{headerShown:false}}/>
+                {/* <Stack.Screen name='Meal' component={Meals} /> */}
+                <Stack.Screen name='Detail' component={MealDetail} />               
             </Stack.Navigator>
         </NavigationContainer>
     )

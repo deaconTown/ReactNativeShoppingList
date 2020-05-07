@@ -7,13 +7,13 @@ import AddItem from './components/AddItem/AddItem';
 // import Navigator from './routes/homeStack/'
 import TabNavigator from './routes/TabNavigator';
 import StackNavigator from './routes/StackNavigator';
+import DrawerNavigator from './routes/DrawerNavigator';
 
 
 const App = () => {
   
   return (
     <View style={styles.container}>
-   {/* <TabNavigator/> */}
    <StackNavigator/>
    </View>
   )
