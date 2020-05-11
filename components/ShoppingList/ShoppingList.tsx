@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Alert, ActivityIndicator, Button, TouchableOpacity, ScrollView , RefreshControl} from 'react-native';
+import { View, Text, StyleSheet, FlatList, Alert, ActivityIndicator, Button, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
 import Header from '../Header/Header';
 import AddItem from '../AddItem/AddItem';
 import AddList from './AddList';
 import ListItem from './ListItem/ListItem';
 import { useFocusEffect } from '@react-navigation/native';
 
-export default function  ShoppingList(props: any){
+export default function ShoppingList(props: any) {
   const [items, setItems] = useState([
     { id: Math.random(), name: 'Milk', qty: 1 },
     { id: Math.random(), name: 'Bread2', qty: 2 },
@@ -41,14 +41,14 @@ export default function  ShoppingList(props: any){
   });
 
   useEffect(() => {
-    
+
     console.log('Testing')
     if (props.route.params !== undefined) {
       setfromMealList(true)
-    }   
+    }
     createContent()
 
-  }, [props.route.params]); 
+  }, [props.route.params]);
 
   // const deleteItem = (id: any) => {
   //   setItems(prevItems => {
@@ -77,20 +77,20 @@ export default function  ShoppingList(props: any){
     if (props.route.params !== undefined) {
       props.route.params.ingredientName.map((x) => {
         name.push(x);
-      }) 
+      })
       props.route.params.measurement.map((x) => {
         qty.push(x);
       })
     }
- 
+
     for (let index = 0; index < name.length; index++) {
       const n = name[index];
       const q = qty[index];
       tempContent.push({ id: Math.random(), name: n, qty: q });
 
     }
-    console.log("tempContent",tempContent)
-    
+    console.log("tempContent", tempContent)
+
     addNewList(tempContent);
   }; //end of createContent
 
@@ -102,7 +102,7 @@ export default function  ShoppingList(props: any){
           [props.route.params.mealName]: { //TODO: Need to do check for duplicate eventually
             id: Math.random(),
             name: props.route.params.mealName,
-            content:content //this is not the state
+            content: content //this is not the state
           }
         }
       })
@@ -125,23 +125,31 @@ export default function  ShoppingList(props: any){
 
       }
     }
-  } 
+  }
 
   return (
     <>
       {/* <Button title="Meals" onPress={()=> props.navigation.navigate('Meals')}/> */}
       <ScrollView style={styles.container}>
         <Header />
-        <View style={styles.body}> 
+        <View style={styles.body}>
           <AddItem addItem={addItem} />
+          <Button
+            title="New Shopping List"
+            onPress={() => {
+              /* 1. Navigate to the Details route with params */
+              props.navigation.navigate('New Shopping List', {
+              });
+            }}
+          />
           {Object.keys(shoppingLists).map((item, _key) => {
             var listItem = shoppingLists[item]
             var lists = listItem['content']
-            return <AddList data={lists} title={listItem['name']} fromMealList={fromMealList}/>
+            return <AddList data={lists} title={listItem['name']} fromMealList={fromMealList} />
           })}
         </View>
       </ScrollView>
-    </> 
+    </>
   )
 };
 
@@ -155,7 +163,7 @@ const styles = StyleSheet.create({
   body: {
     marginTop: 10,
     padding: 24
-  }, 
+  },
   flatList: {
     position: 'relative',
     display: 'flex',

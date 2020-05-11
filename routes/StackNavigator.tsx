@@ -15,6 +15,7 @@ import MealDetail from '../components/Meals/MealDetail/MealDetail';
 import { SearchMealByName } from '../components/Meals';
 import { AddList } from '../components/ShoppingList';
 import MealsByCategory from '../components/Meals/SearchMealByCategory/MealsByCategory';
+import CreateNewShoppingList from '../components/ShoppingList/CreateNewShoppingList';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialTopTabNavigator();
@@ -29,6 +30,7 @@ const StackNavigator = () => {
                 {/* <Stack.Screen name='Meal' component={Meals} /> */}
                 <Stack.Screen name='Detail' component={MealDetail} />  
                 <Stack.Screen name='AddList' component={AddList} />
+                <Stack.Screen name='New Shopping List' component={CreateNewShoppingList} />
             </Stack.Navigator>
         </NavigationContainer>
     ) 
