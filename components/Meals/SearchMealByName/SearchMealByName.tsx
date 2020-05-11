@@ -4,13 +4,14 @@ import { useState, useEffect } from "react";
 import MealHandler from "../MealHandler";
 import { Ionicons } from '@expo/vector-icons';
 import Meals from "../Meals";
+import DisplayMultipleMeals from "../DisplayMultipleMeals";
 
 export default function SearchMealByName(props: any) {
     const [meals, setMeals] = useState([]);
     const [showMeals, setShowMeals] = useState(false);
     const [noMeal, setNoMealAvailable] = useState(false);
     const [name, setName] = useState('');
-    const [isLoading, setLoading] = useState(true);
+    // const [isLoading, setLoading] = useState(true);
     const mealHandler = new MealHandler();
 
     //get meal by name
@@ -19,7 +20,7 @@ export default function SearchMealByName(props: any) {
             if (response) {
                 setMeals(response.data.meals);
                 setShowMeals(true);
-                setLoading(false);               
+                // setLoading(false);               
             }
             if (meals == null) {
                 setNoMealAvailable(true);
@@ -86,36 +87,8 @@ export default function SearchMealByName(props: any) {
                     <Ionicons name='md-search' size={20} /> Search Meals
                     </Text>
             </TouchableOpacity>
-            {showMeals ?
-                <>
-                    {isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : (
-                        <>
-                            <FlatList
-                                style={styles.flatList}
-                                data={meals}
-                                renderItem={({ item }) => (
-                                    <>
-                                        <Text style={{ marginTop: 30, marginBottom: 1, }}>Name: {item.strMeal}</Text>
-                                        <View style={styles.text}>
-                                            <Image source={{ uri: item.strMealThumb, height: 300, width: 345 }} style={{ borderColor: 'black', borderWidth: 1 }} />
-                                        </View>
-                                        <Text style={{ marginTop: 5, marginBottom: 5, }}>Category: {item.strCategory}</Text>
-                                        <Button
-                                            title="Go to Details"
-                                            onPress={() => {
-                                                /* 1. Navigate to the Details route with params */
-                                                props.navigation.navigate('Detail', {
-                                                    mealId: item.idMeal,
-                                                });
-                                            }}
-                                        />
-                                    </>
-                                )}
-                                keyExtractor={(item, index) => item.idMeal}
-                            />
-                        </>
-                    )}
-                </>
+            {showMeals ?                
+                    <DisplayMultipleMeals meals={meals}/>                
                 :
               msg()
             }

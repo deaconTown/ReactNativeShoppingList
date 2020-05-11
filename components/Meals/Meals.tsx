@@ -3,70 +3,40 @@ import { View, FlatList, ActivityIndicator, Text, Image, Linking, StyleSheet, Pi
 import Header from '../Header/Header';
 import MealHandler from './MealHandler';
 import alphabet from './alphabet.json'
+import DisplayMultipleMeals from './DisplayMultipleMeals';
 
 export default function Meals(props: any) {
   const [meals, setMeals] = useState([]);
-  const [isLoading, setLoading] = useState(true);
   const [filterValue, setFilterValue] = useState('')
   const mealHandler = new MealHandler();
 
-  //get list of meal by the firt name
+  //get list of meal by the firt name on component mount
   useEffect(() => {
-    if (props.isNameSearch) {
-      // getMealByName();
-      setMeals(props.meals)
-      console.log("props.meals", props.meals)
-      setLoading(false);
-    }
-    else {
       getMealsByFirstLetter()
-    }
-
-
-
   }, [])
 
-  const getMealsByFirstLetter = () => {
-    mealHandler.FilterMealsByFirstLetter("a").then((response) => {
+  const getMealsByFirstLetter = (letter: string = 'a') => {
+    mealHandler.FilterMealsByFirstLetter(letter).then((response) => {
       if (response) {
         setMeals(response.data.meals)
-        setLoading(false);
       }
     });
   };
 
-  // const getMealByName = () => {
-  //   mealHandler.GetMealByName('Chicken').then((response) => {
-  //     if(response){
-  //       setMeals(response.data.meals)
-  //       setLoading(false);
-  //       console.log("Meal by name response", response.data.meals)
-  //     }
-  //   })
-  // }
-
   const updateMealFilter = (itemValue: any) => {
     setFilterValue(itemValue)
-    mealHandler.FilterMealsByFirstLetter(itemValue).then((response) => {
-      if (response) {
-        setMeals(response.data.meals)
-        // console.log(meals)
-        setLoading(false);
-      }
-    });
+    getMealsByFirstLetter(itemValue);
   }
 
   return (
 
     <View style={styles.container}>
-      {/* {props.isNameSearch ? <Text></Text> : */}
-        <>
           <Header title='Meals' />
-          <TouchableOpacity >
+          {/* <TouchableOpacity > */}
             <View>
               <Picker
                 selectedValue={filterValue == '' ? 'A' : filterValue}
-                style={{ height: 50, width: 150 }}
+                style={styles.picker}
                 onValueChange={(itemValue, itemIndex) => updateMealFilter(itemValue)}
               >
                 {alphabet.map((s, i) => {
@@ -74,37 +44,9 @@ export default function Meals(props: any) {
                 })}
               </Picker>
             </View>
-          </TouchableOpacity>
-        </>
-      {/* } */}
+          {/* </TouchableOpacity> */}
 
-      {isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : (
-        <>
-          <FlatList
-            style={styles.flatList}
-            data={meals}
-            renderItem={({ item }) => (
-              <>
-                <Text style={{ marginTop: 30, marginBottom: 1, }}>Name: {item.strMeal}</Text>
-                <View style={styles.text}>
-                  <Image source={{ uri: item.strMealThumb, height: 300, width: 345 }} style={{ borderColor: 'black', borderWidth: 1 }} />
-                </View>
-                <Text style={{ marginTop: 5, marginBottom: 5, }}>Category: {item.strCategory}</Text>
-                <Button
-                  title="Go to Details"
-                  onPress={() => {
-                    /* 1. Navigate to the Details route with params */
-                    props.navigation.navigate('Detail', {
-                      mealId: item.idMeal,
-                    });
-                  }}
-                />
-              </>
-            )}
-            keyExtractor={(item, index) => item.idMeal}
-          />
-        </>
-      )}
+      <DisplayMultipleMeals meals={meals} navigation={props.navigation}/>    
     </View>
 
   )
@@ -125,5 +67,10 @@ const styles = StyleSheet.create({
   text: {
     marginTop: 30,
     marginBottom: 3,
+  },
+  picker: {
+    height: 50, 
+    width: 100,
+    marginLeft: 20
   }
 });
