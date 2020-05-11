@@ -3,90 +3,52 @@ import { View, FlatList, ActivityIndicator, Text, Image, Linking, StyleSheet, Pi
 import Header from '../Header/Header';
 import MealHandler from './MealHandler';
 import alphabet from './alphabet.json'
+import DisplayMultipleMeals from './DisplayMultipleMeals';
 
 export default function Meals(props: any) {
   const [meals, setMeals] = useState([]);
-  const [isLoading, setLoading] = useState(true);
   const [filterValue, setFilterValue] = useState('')
   const mealHandler = new MealHandler();
 
-  //get list of meal by the firt name
+  //get list of meal by the firt name on component mount
   useEffect(() => {
-    mealHandler.FilterMealByFirstLetter("a").then((response) => {
+      getMealsByFirstLetter()
+  }, [])
+
+  const getMealsByFirstLetter = (letter: string = 'a') => {
+    mealHandler.FilterMealsByFirstLetter(letter).then((response) => {
       if (response) {
         setMeals(response.data.meals)
-        setFilterValue('A')
-        setLoading(false);
       }
     });
-  }, [])
-  
+  };
 
   const updateMealFilter = (itemValue: any) => {
     setFilterValue(itemValue)
-    mealHandler.FilterMealByFirstLetter(itemValue).then((response) => {
-      if (response) {
-        setMeals(response.data.meals)
-        // console.log(meals)
-        setLoading(false);
-      }
-    });
+    getMealsByFirstLetter(itemValue);
   }
 
-  //TODO: 
-    // VirtualizedList: You have a large list that is slow to update - make sure your renderItem function renders components that follow React performance best practices like PureComponent, shoulactices like PureComponent, shouldComponentUpdate, etc. Object {
-      //   "contentLength": 7152,
-      //   "dt": 4342,  
-      //   "prevDt": 3593, 
-      // } 
- console.log(filterValue)
-  return (   
-    <ScrollView style={styles.container}>
-      <Header title='Meals' />
-      <TouchableOpacity >
-      <View>
-        <Picker
-          selectedValue={filterValue}
-          style={{ height: 50, width: 150 }}
-          onValueChange={(itemValue, itemIndex) => updateMealFilter(itemValue)}
-        >
-          {alphabet.map((s, i) => {
-            return <Picker.Item key={i} label={s} value={s} />
-          })}
-        </Picker>
-        <Button title="Reset" onPress={()=>{}}/> 
-      </View>
-      </TouchableOpacity>
+  return (
 
-      {isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : (
-        <>
-          <FlatList
-            style={styles.flatList}
-            data={meals}
-            renderItem={({ item }) => (
-              <>
-                <Text style={{marginTop: 30, marginBottom: 1, }}>Name: {item.strMeal}</Text>
-                <View style={styles.text}>
-                  <Image source={{ uri: item.strMealThumb, height: 300, width: 345 }} style={{ borderColor: 'black', borderWidth: 1 }} />
-                </View>
-                <Text style={{marginTop: 5, marginBottom: 5, }}>Category: {item.strCategory}</Text>
-                <Button
-                  title="Go to Details"
-                  onPress={() => {
-                    /* 1. Navigate to the Details route with params */
-                    props.navigation.navigate('Detail', {
-                      mealId: item.idMeal,
-                    });
-                  }}
-                />
-              </>
-            )}
-            keyExtractor={(item, index) => item.idMeal}
-          />
-        </>
-      )}
+    <ScrollView style={styles.container}>
+          <Header title='Meals' />
+          {/* <TouchableOpacity > */}
+            <View>
+              <Picker
+                selectedValue={filterValue == '' ? 'A' : filterValue}
+                style={styles.picker}
+                onValueChange={(itemValue, itemIndex) => updateMealFilter(itemValue)}
+              >
+                {alphabet.map((s, i) => {
+                  return <Picker.Item key={i} label={s} value={s} />
+                })}
+              </Picker>
+            </View>
+          {/* </TouchableOpacity> */}
+
+      <DisplayMultipleMeals meals={meals} navigation={props.navigation}/>    
     </ScrollView>
-    
+
   )
 };
 
@@ -97,13 +59,9 @@ const styles = StyleSheet.create({
     // minHeight: 100,
     position: 'relative',
   },
-  flatList: {
-    // marginTop: 10,
-    padding: 24,
-    paddingBottom:50
-  },
-  text: {
-    marginTop: 30,
-    marginBottom: 3,
+  picker: {
+    height: 50, 
+    width: 100,
+    marginLeft: 20
   }
 });

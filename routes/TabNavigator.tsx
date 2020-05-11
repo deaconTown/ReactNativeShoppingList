@@ -11,6 +11,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { MealDetail } from '../components/Meals';
 import StackNavigator from './StackNavigator';
+import DrawerNavigator from './DrawerNavigator';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialTopTabNavigator();
@@ -57,7 +58,7 @@ const TabNavigator = () => {
             iconName = focused
               ? 'ios-pizza'
               : 'ios-pizza';
-          } else if (route.name === 'ShoppingList') {
+          } else if (route.name === 'Shopping List') {
             iconName = focused ? 'ios-list-box' : 'ios-list';
           }
 
@@ -70,8 +71,8 @@ const TabNavigator = () => {
         inactiveTintColor: 'gray',
       }}
       >
-        <BottomTab.Screen name="ShoppingList" component={ShoppingList} />
-        <BottomTab.Screen name="Meals" component={Meals} />
+        <BottomTab.Screen name="Shopping List" component={ShoppingList} />
+        <BottomTab.Screen name="Meals" component={DrawerNavigator} />
       </BottomTab.Navigator>
     //</NavigationContainer>
   )
