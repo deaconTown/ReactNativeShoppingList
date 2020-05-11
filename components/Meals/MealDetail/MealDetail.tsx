@@ -13,7 +13,7 @@ export default function MealDetail(props: any) {
 
     //get meal by id
     useEffect(() => {
-        mealHandler.FilterMealById(props.route.params.mealId).then((response) => {
+        mealHandler.GetMealById(props.route.params.mealId).then((response) => {
             if (response) {
                 setMeal(response.data.meals)
                 setLoading(false);

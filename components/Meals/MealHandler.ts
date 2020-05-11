@@ -4,7 +4,7 @@ import { Alert } from 'react-native';
 
 export class MealHandler {
 
-    FilterMealByFirstLetter = async (letter: string) => {
+    FilterMealsByFirstLetter = async (letter: string) => {
         try {
             return await axios.get(`https://www.themealdb.com/api/json/v1/1/search.php?f=${letter}`);
         } catch (error) {
@@ -12,7 +12,7 @@ export class MealHandler {
         }
     };
 
-    FilterMealById = async (id: string) => {
+    GetMealById = async (id: string) => {
         try {
             return await axios.get(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
         } catch (error) {
@@ -68,7 +68,7 @@ export class MealHandler {
         }
     };
 
-    FilterMealByMainIngredient = async (ingredient: string) => {
+    FilterMealsByMainIngredient = async (ingredient: string) => {
         try {
             return await axios.get(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${ingredient}`);
         } catch (error) {
@@ -76,7 +76,7 @@ export class MealHandler {
         }
     };
 
-    FilterMealByCategory = async (category: string) => {
+    FiltersMealByCategory = async (category: string) => {
         try {
             return await axios.get(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`);
         } catch (error) {
@@ -84,7 +84,7 @@ export class MealHandler {
         }
     };
 
-    FilterMealByArea = async (area: string) => {
+    FilterMealsByArea = async (area: string) => {
         try {
             return await axios.get(`https://www.themealdb.com/api/json/v1/1/filter.php?a=${area}`);
         } catch (error) {

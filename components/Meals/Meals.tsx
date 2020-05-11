@@ -12,17 +12,42 @@ export default function Meals(props: any) {
 
   //get list of meal by the firt name
   useEffect(() => {
-    mealHandler.FilterMealByFirstLetter("a").then((response) => {
+    if (props.isNameSearch) {
+      // getMealByName();
+      setMeals(props.meals)
+      console.log("props.meals", props.meals)
+      setLoading(false);
+    }
+    else {
+      getMealsByFirstLetter()
+    }
+
+
+
+  }, [])
+
+  const getMealsByFirstLetter = () => {
+    mealHandler.FilterMealsByFirstLetter("a").then((response) => {
       if (response) {
         setMeals(response.data.meals)
         setLoading(false);
       }
     });
-  }, [])
+  };
+
+  // const getMealByName = () => {
+  //   mealHandler.GetMealByName('Chicken').then((response) => {
+  //     if(response){
+  //       setMeals(response.data.meals)
+  //       setLoading(false);
+  //       console.log("Meal by name response", response.data.meals)
+  //     }
+  //   })
+  // }
 
   const updateMealFilter = (itemValue: any) => {
     setFilterValue(itemValue)
-    mealHandler.FilterMealByFirstLetter(itemValue).then((response) => {
+    mealHandler.FilterMealsByFirstLetter(itemValue).then((response) => {
       if (response) {
         setMeals(response.data.meals)
         // console.log(meals)
@@ -30,24 +55,28 @@ export default function Meals(props: any) {
       }
     });
   }
- 
+
   return (
-   
+
     <View style={styles.container}>
-      <Header title='Meals' />
-      <TouchableOpacity >
-      <View>
-        <Picker
-          selectedValue={filterValue == ''? 'A': filterValue}
-          style={{ height: 50, width: 150 }}
-          onValueChange={(itemValue, itemIndex) => updateMealFilter(itemValue)}
-        >
-          {alphabet.map((s, i) => {
-            return <Picker.Item key={i} label={s} value={s} />
-          })}
-        </Picker>
-      </View>
-      </TouchableOpacity>
+      {/* {props.isNameSearch ? <Text></Text> : */}
+        <>
+          <Header title='Meals' />
+          <TouchableOpacity >
+            <View>
+              <Picker
+                selectedValue={filterValue == '' ? 'A' : filterValue}
+                style={{ height: 50, width: 150 }}
+                onValueChange={(itemValue, itemIndex) => updateMealFilter(itemValue)}
+              >
+                {alphabet.map((s, i) => {
+                  return <Picker.Item key={i} label={s} value={s} />
+                })}
+              </Picker>
+            </View>
+          </TouchableOpacity>
+        </>
+      {/* } */}
 
       {isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : (
         <>
@@ -56,11 +85,11 @@ export default function Meals(props: any) {
             data={meals}
             renderItem={({ item }) => (
               <>
-                <Text style={{marginTop: 30, marginBottom: 1, }}>Name: {item.strMeal}</Text>
+                <Text style={{ marginTop: 30, marginBottom: 1, }}>Name: {item.strMeal}</Text>
                 <View style={styles.text}>
                   <Image source={{ uri: item.strMealThumb, height: 300, width: 345 }} style={{ borderColor: 'black', borderWidth: 1 }} />
                 </View>
-                <Text style={{marginTop: 5, marginBottom: 5, }}>Category: {item.strCategory}</Text>
+                <Text style={{ marginTop: 5, marginBottom: 5, }}>Category: {item.strCategory}</Text>
                 <Button
                   title="Go to Details"
                   onPress={() => {
@@ -77,7 +106,7 @@ export default function Meals(props: any) {
         </>
       )}
     </View>
-    
+
   )
 };
 
@@ -91,7 +120,7 @@ const styles = StyleSheet.create({
   flatList: {
     // marginTop: 10,
     padding: 24,
-    paddingBottom:50
+    paddingBottom: 50
   },
   text: {
     marginTop: 30,
