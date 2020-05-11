@@ -11,7 +11,6 @@ export default function SearchMealByName(props: any) {
     const [showMeals, setShowMeals] = useState(false);
     const [noMeal, setNoMealAvailable] = useState(false);
     const [name, setName] = useState('');
-    // const [isLoading, setLoading] = useState(true);
     const mealHandler = new MealHandler();
 
     //get meal by name
@@ -27,22 +26,17 @@ export default function SearchMealByName(props: any) {
                 console.log("Meals is null")
                 setShowMeals(false)
             }
-            // else {
-            //     setNoMealAvailable(false);
-            //     setShowMeals(false)
-            //     console.log("Meals is not null")
-            // }
             console.log(noMeal)
         });
     }
 
+    //TODO: the below is not doing anything at the moment
     const onReset = () => {
         setName('')
         getMeal()
     }
 
     const msg = () => {
-        // setShowMeals(false)
         if (noMeal) {
             console.log("We are sorry to say we have no meal with that name.")
             return (<>
@@ -117,11 +111,6 @@ const styles = StyleSheet.create({
         paddingTop: 40,
         // minHeight: 100,
         position: 'relative',
-    },
-    flatList: {
-        // marginTop: 10,
-        padding: 24,
-        paddingBottom: 50
     },
     text: {
         marginTop: 30,

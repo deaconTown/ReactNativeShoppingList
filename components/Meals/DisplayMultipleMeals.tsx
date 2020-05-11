@@ -44,27 +44,6 @@ export default function DisplayMultipleMeals(props: any) {
 }
 
 const styles = StyleSheet.create({
-    input: {
-        height: 60,
-        padding: 8,
-        fontSize: 16
-    },
-    btn: {
-        backgroundColor: '#c2bad8',
-        padding: 8,
-        margin: 5
-    },
-    btnText: {
-        color: 'darkslateblue',
-        fontSize: 20,
-        textAlign: 'center'
-    },
-    container: {
-        flex: 1,
-        paddingTop: 40,
-        // minHeight: 100,
-        position: 'relative',
-    },
     flatList: {
         // marginTop: 10,
         padding: 24,

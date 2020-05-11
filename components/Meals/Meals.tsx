@@ -59,15 +59,6 @@ const styles = StyleSheet.create({
     // minHeight: 100,
     position: 'relative',
   },
-  flatList: {
-    // marginTop: 10,
-    padding: 24,
-    paddingBottom: 50
-  },
-  text: {
-    marginTop: 30,
-    marginBottom: 3,
-  },
   picker: {
     height: 50, 
     width: 100,
