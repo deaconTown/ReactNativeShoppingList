@@ -36,7 +36,7 @@ export class MealHandler {
         }
     };
 
-    GetMealCategory = async () => {
+    GetMealCategories = async () => {
         try {
             return await axios.get(`https://www.themealdb.com/api/json/v1/1/categories.php`);
         } catch (error) {
@@ -44,7 +44,7 @@ export class MealHandler {
         }
     };
 
-    GetAllCategory = async () => {
+    GetAllCategoryList = async () => {
         try {
             return await axios.get(`https://www.themealdb.com/api/json/v1/1/list.php?c=list`);
         } catch (error) {
