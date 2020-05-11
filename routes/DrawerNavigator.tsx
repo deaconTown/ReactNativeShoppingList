@@ -1,7 +1,8 @@
 import 'react-native-gesture-handler';
 import React from 'react'
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import Meals, { SearchMealByName } from '../components/Meals';
+import Meals, { SearchMealByName, SearchMealByCategory } from '../components/Meals';
+import CategoryNavigator from './CategoryNavigator';
 
 export default function DrawerNavigator(props: any) {
 
@@ -11,7 +12,8 @@ export default function DrawerNavigator(props: any) {
     return (
         <Drawer.Navigator initialRouteName='Meals'>
             <Drawer.Screen name="Meals" component={Meals} />
-            <Drawer.Screen name="Name Search" component={SearchMealByName} />
+            <Drawer.Screen name="By Name" component={SearchMealByName} />
+            <Drawer.Screen name="By Category" component={CategoryNavigator} />
         </Drawer.Navigator>
     )
 }

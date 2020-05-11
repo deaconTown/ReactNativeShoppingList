@@ -14,6 +14,7 @@ import DrawerNavigator from './DrawerNavigator';
 import MealDetail from '../components/Meals/MealDetail/MealDetail';
 import { SearchMealByName } from '../components/Meals';
 import { AddList } from '../components/ShoppingList';
+import MealsByCategory from '../components/Meals/SearchMealByCategory/MealsByCategory';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialTopTabNavigator();
@@ -27,7 +28,6 @@ const StackNavigator = () => {
                 <Stack.Screen name='Home' component={TabNavigator}  options={{headerShown:false}}/>
                 {/* <Stack.Screen name='Meal' component={Meals} /> */}
                 <Stack.Screen name='Detail' component={MealDetail} />  
-                {/* <Stack.Screen name='Shopping List' component={ShoppingList} /> */}
                 <Stack.Screen name='AddList' component={AddList} />
             </Stack.Navigator>
         </NavigationContainer>

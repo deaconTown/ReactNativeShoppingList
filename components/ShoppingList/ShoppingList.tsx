@@ -99,7 +99,7 @@ export default function  ShoppingList(props: any){
       setShoppingLists(previousList => {
         return {
           ...previousList,
-          [props.route.params.mealName]: {
+          [props.route.params.mealName]: { //TODO: Need to do check for duplicate eventually
             id: Math.random(),
             name: props.route.params.mealName,
             content:content //this is not the state

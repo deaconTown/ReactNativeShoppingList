@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { ActivityIndicator, FlatList, Text, Image, View, Button, StyleSheet} from 'react-native';
+import { ActivityIndicator, FlatList, Text, Image, View, Button, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 export default function DisplayMultipleMeals(props: any) {
@@ -7,7 +7,7 @@ export default function DisplayMultipleMeals(props: any) {
     const navigation = useNavigation();
 
     useEffect(() => {
-        if(props.meals){
+        if (props.meals) {
             setLoading(false)
         }
     })
@@ -24,7 +24,11 @@ export default function DisplayMultipleMeals(props: any) {
                             <View style={styles.text}>
                                 <Image source={{ uri: item.strMealThumb, height: 300, width: 345 }} style={{ borderColor: 'black', borderWidth: 1 }} />
                             </View>
-                            <Text style={{ marginTop: 5, marginBottom: 5, }}>Category: {item.strCategory}</Text>
+                            {item.strCategory ?
+                                <Text style={{ marginTop: 5, marginBottom: 5, }}>Category: {item.strCategory}</Text>
+                                :
+                                <Text ></Text>
+                            }
                             <Button
                                 title="Go to Details"
                                 onPress={() => {
