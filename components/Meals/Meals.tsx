@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, FlatList, ActivityIndicator, Text, Image, Linking, StyleSheet, Picker, Button, TouchableOpacity } from 'react-native';
+import { View, FlatList, ActivityIndicator, Text, Image, Linking, StyleSheet, Picker, Button, TouchableOpacity, ScrollView } from 'react-native';
 import Header from '../Header/Header';
 import MealHandler from './MealHandler';
 import alphabet from './alphabet.json'

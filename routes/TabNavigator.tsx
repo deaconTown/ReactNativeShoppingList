@@ -58,7 +58,7 @@ const TabNavigator = () => {
             iconName = focused
               ? 'ios-pizza'
               : 'ios-pizza';
-          } else if (route.name === 'Shopping') {
+          } else if (route.name === 'ShoppingList') {
             iconName = focused ? 'ios-list-box' : 'ios-list';
           }
 

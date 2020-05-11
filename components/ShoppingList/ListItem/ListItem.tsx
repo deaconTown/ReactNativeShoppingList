@@ -16,9 +16,8 @@ const ListItem = (props : any) => {
                 value={isSelected}
                 onChange={()=>setSelection(!isSelected)}
                 />
-                
-                <Text style={styles.listItemText}>Name: {props.item.name}</Text>
-                <Text style={styles.listItemText}>Amount: {props.item.qty}</Text>
+                <Text style={styles.listItemText}>{props.item.name}</Text>
+                <Text style={styles.listItemText}>{props.item.qty}</Text>
                 <Ionicons name="md-trash" size={20} color="firebrick" 
                 onPress = {() => props.deleteItem(props.item.id)} />
             </View>
