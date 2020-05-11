@@ -26,14 +26,12 @@ const StackNavigator = () => {
             <Stack.Navigator >
                 <Stack.Screen name='Home' component={TabNavigator}  options={{headerShown:false}}/>
                 {/* <Stack.Screen name='Meal' component={Meals} /> */}
-                <Stack.Screen name='Detail' component={MealDetail} />               
-                <Stack.Screen name="Home" component={TabNavigator}  options={{headerShown:false}}/>
-                <Stack.Screen name='Detail' component={MealDetail} />
-                <Stack.Screen name='ShoppingList' component={ShoppingList} />
+                <Stack.Screen name='Detail' component={MealDetail} />  
+                {/* <Stack.Screen name='Shopping List' component={ShoppingList} /> */}
                 <Stack.Screen name='AddList' component={AddList} />
             </Stack.Navigator>
         </NavigationContainer>
-    )
+    ) 
 }
 
 export default StackNavigator;

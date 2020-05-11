@@ -106,7 +106,7 @@ export default function MealDetail(props: any) {
                                     title="Send To ShoppingList"
                                     onPress={() => {
                                         /* 1. Navigate to the Details route with params */
-                                        props.navigation.navigate('ShoppingList', {
+                                        props.navigation.navigate('Shopping List', {
                                             measurement: measurements,
                                             ingredient: ingredients,
                                             ingredientName: ingredientNames,

@@ -30,7 +30,7 @@ export default function Meals(props: any) {
 
   return (
 
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
           <Header title='Meals' />
           {/* <TouchableOpacity > */}
             <View>
@@ -47,7 +47,7 @@ export default function Meals(props: any) {
           {/* </TouchableOpacity> */}
 
       <DisplayMultipleMeals meals={meals} navigation={props.navigation}/>    
-    </View>
+    </ScrollView>
 
   )
 };
