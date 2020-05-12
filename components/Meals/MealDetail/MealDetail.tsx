@@ -19,12 +19,10 @@ export default function MealDetail(props: any) {
                 setLoading(false);
 
                 getIngredientsList(response.data.meals);
+                console.log("meal", meal)  
             }
         });
     }, [])
-
-    // console.log(props.navigation)
-    // console.log(props.route)
 
     const getIngredientsList = (meal: []) => {
         //create temp array to store ingredient names and measurement
@@ -45,7 +43,7 @@ export default function MealDetail(props: any) {
                     tempIngr.push(x[element]);
                 }
             });
-            //set IngredientNames state ~ might need it at some point //TODO: remove if found not needed
+            //set IngredientNames state 
             setIngredientNames(tempIngr);
 
             //add measurement to temp array if value is not null
@@ -54,11 +52,11 @@ export default function MealDetail(props: any) {
                     tempMeasurement.push(x[element]);
                 }
             });
-            //set Measurements state ~ might need it at some point //TODO: remove if found not needed
+            //set Measurements state 
             setMeasurements(tempMeasurement)
         })
 
-        //concat IngredientNames & Measurements, then set Ingredient state to use in flatlist
+        //concat IngredientNames & Measurements, then set Ingredient state to use in flatlist ~ might need it at some point //TODO: remove if found not needed
         var temp: string[] = [];
         for (var i = 0; i < tempIngr.length; i++) {
             temp.push(tempIngr[i].concat(' ').concat(tempMeasurement[i]))

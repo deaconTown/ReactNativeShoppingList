@@ -9,7 +9,7 @@ export default function AddList(props: any) {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
-        setItems(props.data);
+        setItems(props.data);//TODO: Set Limit to 10 list max eventually
     }, [])
 
     const Title = () => {
