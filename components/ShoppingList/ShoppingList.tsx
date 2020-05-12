@@ -32,12 +32,16 @@ export default function ShoppingList(props: any) {
     }
   });
 
+  // console.log(props.route.params)
+
   useEffect(() => {
 
     if (props.route.params !== undefined) {
       setfromMealList(true)
     }
     createContent()
+    console.log('testing')
+    console.log(props.route.params)
 
   }, [props.route.params]);
 

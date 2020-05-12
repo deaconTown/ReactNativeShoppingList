@@ -45,7 +45,6 @@ export default function CreateNewShoppingList(props: any) {
         var tempIngr: string[] = [];
         var tempMeasurement: string[] = [];
         items.map((x) => {
-            console.log("x", x)
             tempIngr.push(x.name);
             tempMeasurement.push(x.qty.toString());
         });
