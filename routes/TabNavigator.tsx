@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { MealDetail } from '../components/Meals';
 import StackNavigator from './StackNavigator';
 import DrawerNavigator from './DrawerNavigator';
+import ShoppingListNavigator from './ShoppingListNavigator';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialTopTabNavigator();
@@ -20,35 +21,6 @@ const BottomTab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   return (
-    //  <NavigationContainer>
-    //      <Stack.Navigator initialRouteName="Home">
-    //           <Stack.Screen name ='Home' component={ShoppingList} 
-    //            options={{
-    //               headerTitle: "Home",
-    //               headerRight: () => (
-    //                 <Button
-    //                   onPress={() => alert('This is the Home button!')}
-    //                   title="Meals"
-    //                   color="black"
-    //                 />
-    //               ),
-    //             }}
-    //           />
-    //           <Stack.Screen name ='Meals' component={Meals}
-    //            options={{
-    //               headerTitle: "Meals",
-    //               headerRight: () => (
-    //                 <Button
-    //                   onPress={() => alert('This is the Meal button!')}
-    //                   title="Info"
-    //                   color="#eee"
-    //                 />
-    //               ),
-    //             }}
-    //           />
-    //      </Stack.Navigator>
-    //  </NavigationContainer>
-    //<NavigationContainer>
       <BottomTab.Navigator
        screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
@@ -71,10 +43,9 @@ const TabNavigator = () => {
         inactiveTintColor: 'gray',
       }}
       >
-        <BottomTab.Screen name="Shopping List" component={ShoppingList} />
+        <BottomTab.Screen name="ShoppingListNav" component={ShoppingListNavigator} options={{title: 'Shopping List'}}/>
         <BottomTab.Screen name="Meals" component={DrawerNavigator} />
       </BottomTab.Navigator>
-    //</NavigationContainer>
   )
 }
 
