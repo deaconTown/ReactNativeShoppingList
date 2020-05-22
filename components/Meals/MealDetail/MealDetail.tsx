@@ -66,7 +66,7 @@ export default function MealDetail(props: any) {
     }
 
     return (
-        <ScrollView>
+        <ScrollView key={Math.random()}>
             {isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : (
                 <>
                     <FlatList
@@ -109,7 +109,8 @@ export default function MealDetail(props: any) {
                                             ingredient: ingredients,
                                             ingredientName: ingredientNames,
                                             mealName: item.strMeal,
-                                            newShoppingList: true
+                                            newShoppingList: true,
+                                            mealId: item.idMeal
                                         });
                                     }}
                                 />
