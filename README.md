@@ -15,4 +15,6 @@ Functions include:
 5. Add generated meal ingredients to a new shopping list.
 
 
+link to app apk: https://expo.io/artifacts/463fbb96-b570-47af-bbbf-b7c11bfb5315
+N.B// app not registered with google play store and is still unfinished, thus faulty.
 
