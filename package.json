@@ -14,7 +14,7 @@
     "@react-navigation/material-top-tabs": "^5.1.14",
     "@react-navigation/native": "^5.1.7",
     "@react-navigation/stack": "^5.2.14",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "expo": "~37.0.3",
     "expo-sqlite": "~8.1.0",
     "i": "^0.3.6",
