@@ -1,5 +1,5 @@
- {
-   "expo": {
+{
+  "expo": {
     "name": "MealShoppingList",
     "icon": "./assets/ShoppingList_App_V1_Icon_Design.png",
     "version": "1.0.0",
@@ -7,9 +7,12 @@
     "android": {
       "package": "com.davia.mealshoppinglist",
       "versionCode": 1
-    }
-   },
-
+    },
+    "ios": {
+      "bundleIdentifier": "no"
+    },
+    "entryPoint": "node_modules/expo/AppEntry.js"
+  },
   "expo_old": {
     "name": "ShoppingList",
     "slug": "ShoppingList",
