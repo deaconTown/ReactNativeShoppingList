@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { View, Alert, FlatList, StyleSheet, Button, TextInput } from 'react-native'
 import AddItem from '../../AddItem'
 import ListItem from '../ListItem/ListItem';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function CreateNewShoppingList(props: any) {
     const [items, setItems] = useState([]);
@@ -62,6 +63,7 @@ export default function CreateNewShoppingList(props: any) {
 
     return (
         <View>
+            <ScrollView>
             <TextInput placeholder='Enter New List Name'
                 style={styles.input}
                 onChangeText={onChangeName}
@@ -88,10 +90,12 @@ export default function CreateNewShoppingList(props: any) {
                         measurement: measurements,
                         ingredientName: ingredientNames,
                         mealName: listName,
-                        newShoppingList: true
+                        newShoppingList: true,
+                        mealId: 0
                     })
                 }
             />
+            </ScrollView>
         </View>
     )
 }

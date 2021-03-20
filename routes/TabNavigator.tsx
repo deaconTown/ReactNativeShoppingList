@@ -30,7 +30,7 @@ const TabNavigator = () => {
             iconName = focused
               ? 'ios-pizza'
               : 'ios-pizza';
-          } else if (route.name === 'Shopping List') {
+          } else if (route.name === 'ShoppingListNav') {
             iconName = focused ? 'ios-list-box' : 'ios-list';
           }
 
