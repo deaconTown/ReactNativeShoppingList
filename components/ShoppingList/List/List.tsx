@@ -1,14 +1,21 @@
 import * as React from "react";
-import { FlatList, StyleSheet, TouchableOpacity, Text, View } from "react-native";
+import { FlatList, StyleSheet, TouchableOpacity, Text, View, SafeAreaView } from "react-native";
 import { useState, useEffect } from "react";
 import ListItem from "../ListItem/ListItem";
 import { Ionicons } from '@expo/vector-icons';
 
-export default function AddList(props: any) {
+interface Props {
+    data : any,
+    title : string,
+    fromMealList: boolean
+}
+
+export default function List(props: Props) {
     const [toggleList, setToggleList] = useState(false);
     const [items, setItems] = useState([]);
 
     useEffect(() => {
+        console.log("props.data", props.data)
         setItems(props.data);//TODO: Set Limit to 10 list max eventually
     }, [])
 
@@ -47,13 +54,15 @@ export default function AddList(props: any) {
             {Title()}
             {toggleList ?
                 <View>
-                    <FlatList style={styles.flatList} data={items} renderItem={({ item }) => (
-                        <ListItem
-                            item={item}
-                            deleteItem={deleteItem}
-                        />
-                    )}
-                        keyExtractor={item => item.id} />
+                    <SafeAreaView style={{ flex: 1 }}>
+                        <FlatList style={styles.flatList} data={items} renderItem={({ item }) => (
+                            <ListItem
+                                item={item}
+                                deleteItem={deleteItem}
+                            />
+                        )}
+                            keyExtractor={item => item.id} />
+                    </SafeAreaView>
                 </View>
                 :
                 <Text ></Text>
