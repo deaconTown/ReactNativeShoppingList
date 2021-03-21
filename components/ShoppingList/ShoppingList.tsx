@@ -111,8 +111,6 @@ export default function ShoppingList(props: any) {
     if (props.route.params !== undefined) {
       setIsNewList(true)
       addNewList(props.route.params)
-      console.log('testing')
-      console.log("props.route.params------------------------------------", props.route.params)
     }
     // createContent();   
 
@@ -203,8 +201,6 @@ export default function ShoppingList(props: any) {
   // };//end of addNewList
 
   const addNewList = (content: ListModel) => {
-    console.log("addNewList")
-    console.log("content", content)
     if (content !== undefined) {
 
       setShoppingLists(previousList => [...previousList, content])

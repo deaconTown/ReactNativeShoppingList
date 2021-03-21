@@ -40,12 +40,12 @@ export default function CreateNewShoppingList(props: any) {
 
     const addItem = (text: string, qty: string) => {
         if (itemExists(text)) {
-            Alert.alert('Error', 'Item already exist');
+            Alert.alert('Item already exist');
         }
         else {
 
             if (!text) {
-                Alert.alert('Error', 'Please enter an item');
+                Alert.alert('Please enter an item');
             }
             else {
                 setItems(prevItems => {
@@ -78,18 +78,15 @@ export default function CreateNewShoppingList(props: any) {
     const createListToSend = (item: any) => {
         let content: ContentModel[] = [];
         item.map(x => {
-            console.log("x",x);
             content.push(x)
             
         })
         let listItem : ListModel = {
             id: Math.random(),
-            name: listName,
+            name: listName || "Quick List",
             content: content
         };
 
-        
-        console.log("listItem", listItem)
         setListToSend(listItem);
         return listItem;
     }
