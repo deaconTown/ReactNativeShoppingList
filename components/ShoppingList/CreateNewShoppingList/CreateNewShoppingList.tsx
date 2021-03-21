@@ -4,6 +4,18 @@ import AddItem from '../../AddItem'
 import ListItem from '../ListItem/ListItem';
 import { ScrollView } from 'react-native-gesture-handler';
 
+interface ListModel {
+    id: number,
+    name: string,
+    content: ContentModel[]
+}
+
+interface ContentModel {
+    id: number,
+    name: string,
+    qty: number
+}
+
 export default function CreateNewShoppingList(props: any) {
     const [items, setItems] = useState([]);
     const [ingredientNames, setIngredientNames] = useState(['']);
@@ -11,12 +23,14 @@ export default function CreateNewShoppingList(props: any) {
     const [ingredients, setIngredients] = useState(['']);
     const [isLoading, setLoading] = useState(true);
     const [listName, setListName] = useState('');
+    const [listToSend, setListToSend] = useState<Partial<ListModel>>({});
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        getIngredientsList();
+    //     // getIngredientsList();
+    //     console.log("items", items)
 
-    }, [items])
+    // }, [items])
 
     const itemExists = (name: string) => {
         return items.some(function (item) {
@@ -42,16 +56,16 @@ export default function CreateNewShoppingList(props: any) {
         }
     }
 
-    const getIngredientsList = () => {
-        var tempIngr: string[] = [];
-        var tempMeasurement: string[] = [];
-        items.map((x) => {
-            tempIngr.push(x.name);
-            tempMeasurement.push(x.qty.toString());
-        });
-        setIngredientNames(tempIngr);
-        setMeasurements(tempMeasurement);
-    }
+    // const getIngredientsList = () => {
+    //     var tempIngr: string[] = [];
+    //     var tempMeasurement: string[] = [];
+    //     items.map((x) => {
+    //         tempIngr.push(x.name);
+    //         tempMeasurement.push(x.qty.toString());
+    //     });
+    //     setIngredientNames(tempIngr);
+    //     setMeasurements(tempMeasurement);
+    // }
 
     const deleteItem = (id: any) => {
         setItems(prevItems => {
@@ -61,40 +75,61 @@ export default function CreateNewShoppingList(props: any) {
 
     const onChangeName = (name: any) => setListName(name);
 
+    const createListToSend = (item: any) => {
+        let content: ContentModel[] = [];
+        item.map(x => {
+            console.log("x",x);
+            content.push(x)
+            
+        })
+        let listItem : ListModel = {
+            id: Math.random(),
+            name: listName,
+            content: content
+        };
+
+        
+        console.log("listItem", listItem)
+        setListToSend(listItem);
+        return listItem;
+    }
+
+    const goToShoppingList = () => {
+        createListToSend(items)
+            console.log("listToSend", listToSend)
+            props.navigation.navigate('Shopping List', createListToSend(items));
+        
+
+    }
+
     return (
         <View>
             <ScrollView>
-            <TextInput placeholder='Enter New List Name'
-                style={styles.input}
-                onChangeText={onChangeName}
-                autoCapitalize="words"
-                autoCorrect={true}
-                autoCompleteType="name"
-                // autoFocus= {true}
-                keyboardType="default"
-                defaultValue = 'Quick List' //TODO: Not working
-            />
-            <AddItem addItem={addItem} />
-            <FlatList style={styles.flatList} data={items} renderItem={({ item }) => (
-                <ListItem
-                    item={item}
-                    deleteItem={deleteItem}
+                <TextInput placeholder='Enter New List Name'
+                    style={styles.input}
+                    onChangeText={onChangeName}
+                    autoCapitalize="words"
+                    autoCorrect={true}
+                    autoCompleteType="name"
+                    // autoFocus= {true}
+                    keyboardType="default"
+                    defaultValue='Quick List' //TODO: Not working
                 />
-            )}
-                keyExtractor={item => item.id} />
-            <Button
-                title="Create New Shopping List"
-                onPress={() =>
-                    /* 1. Navigate to the Details route with params */
-                    props.navigation.navigate('Shopping List', {
-                        measurement: measurements,
-                        ingredientName: ingredientNames,
-                        mealName: listName,
-                        newShoppingList: true,
-                        mealId: 0
-                    })
-                }
-            />
+                <AddItem addItem={addItem} />
+                <FlatList style={styles.flatList} data={items} renderItem={({ item }) => (
+                    <ListItem
+                        item={item}
+                        deleteItem={deleteItem}
+                    />
+                )}
+                    keyExtractor={item => item.id} />
+                <Button
+                    title="Create New Shopping List"
+                    onPress={() =>
+                        /* 1. Navigate to the Details route with params */
+                        goToShoppingList()
+                    }
+                />
             </ScrollView>
         </View>
     )
