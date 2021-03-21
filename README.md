@@ -8,7 +8,7 @@ It subscribes to the TheMealDb api.
 Uses async axios to fetch data from api.
 
 Functions include:
-1. Create new shopping lists (items in lists are added 3 times for some reason; will look into this. Lists not saving DB).
+1. Create new shopping lists (Lists not saving DB).
 2. Remove existing shopping lists.
 3. Edit existing shopping lists (so far remove item from list).
 4. Search/Generate a meal by: name; category - beef, fish; ingredients, etc (most of the free endpoints in TheMealDb).
