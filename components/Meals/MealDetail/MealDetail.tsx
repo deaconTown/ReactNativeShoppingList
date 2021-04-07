@@ -1,7 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator, FlatList, StyleSheet, Image, Linking, Button, ScrollView } from 'react-native'
 import MealHandler from '../MealHandler';
-
+interface ListModel {
+    id: string,
+    name: string,
+    content: ContentModel[]
+}
+interface ContentModel {
+    id: number,
+    name: string,
+    qty: string
+}
+interface Props {
+     
+}
 
 export default function MealDetail(props: any) {
     const [meal, setMeal] = useState([]);
@@ -9,6 +21,7 @@ export default function MealDetail(props: any) {
     const [measurements, setMeasurements] = useState(['']);
     const [ingredients, setIngredients] = useState(['']);
     const [isLoading, setLoading] = useState(true);
+    const [content, setContent] = useState<ContentModel[]>([]);
     const mealHandler = new MealHandler();
 
     //get meal by id
@@ -19,10 +32,21 @@ export default function MealDetail(props: any) {
                 setLoading(false);
 
                 getIngredientsList(response.data.meals);
-                console.log("meal", meal)  
+                // console.log("meal", response.data.meals)  
             }
         });
     }, [])
+
+    const createListToSend = (meal: any) => {
+
+        let listItem : ListModel = {
+            id: meal.idMeal.toString(),
+            name: meal.strMeal.toString(),
+            content: content
+        };
+
+        return listItem;
+    }
 
     const getIngredientsList = (meal: []) => {
         //create temp array to store ingredient names and measurement
@@ -61,8 +85,19 @@ export default function MealDetail(props: any) {
         for (var i = 0; i < tempIngr.length; i++) {
             temp.push(tempIngr[i].concat(' ').concat(tempMeasurement[i]))
         }
-        // console.log("ingredients", temp) 
+        console.log("ingredients", temp) 
         setIngredients(temp);
+
+        let contentList: ContentModel[] = [];
+        for (var i = 0; i < tempIngr.length; i++) {
+            contentList.push({id: Math.random(), name : tempIngr[i], qty : tempMeasurement[i]})
+        } 
+
+        setContent(contentList);
+    }
+
+    const goToShoppingList = (item: any) => {        
+        props.navigation.navigate('Shopping List', createListToSend(item));        
     }
 
     return (
@@ -104,14 +139,7 @@ export default function MealDetail(props: any) {
                                     title="Send To ShoppingList"
                                     onPress={() => {
                                         /* 1. Navigate to the Details route with params */
-                                        props.navigation.navigate('Shopping List', {
-                                            measurement: measurements,
-                                            ingredient: ingredients,
-                                            ingredientName: ingredientNames,
-                                            mealName: item.strMeal,
-                                            newShoppingList: true,
-                                            mealId: item.idMeal
-                                        });
+                                        goToShoppingList(item)
                                     }}
                                 />
                             </>
