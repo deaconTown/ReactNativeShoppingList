@@ -10,7 +10,7 @@ import * as SQLite from 'expo-sqlite';
 
 // const db = SQLite.openDatabase('ShoppingList.db');
 interface ListModel {
-  id: number,
+  id: string,
   name: string,
   content: ContentModel[]
 }
@@ -26,7 +26,7 @@ export default function ShoppingList(props: any) {
   const [list, setList] = useState([]);
   const [shoppingLists, setShoppingLists] = useState([
     {
-      id: Math.random(),
+      id: Math.random().toString(),
       name: 'List 1',
       content: [
         { id: Math.random(), name: 'Milk', qty: 1 },
@@ -36,7 +36,7 @@ export default function ShoppingList(props: any) {
       ]
     },
     {
-      id: Math.random(),
+      id: Math.random().toString(),
       name: 'List 2',
       content:
         [
@@ -105,11 +105,9 @@ export default function ShoppingList(props: any) {
   //   // createDBTables();
   // }, []);
 
-
-
   useEffect(() => {
     if (props.route.params !== undefined) {
-      setIsNewList(true)
+      setIsNewList(true);
       addNewList(props.route.params)
     }
     // createContent();   

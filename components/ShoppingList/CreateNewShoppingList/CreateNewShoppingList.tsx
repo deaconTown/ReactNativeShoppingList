@@ -5,7 +5,7 @@ import ListItem from '../ListItem/ListItem';
 import { ScrollView } from 'react-native-gesture-handler';
 
 interface ListModel {
-    id: number,
+    id: string,
     name: string,
     content: ContentModel[]
 }
@@ -82,19 +82,18 @@ export default function CreateNewShoppingList(props: any) {
             
         })
         let listItem : ListModel = {
-            id: Math.random(),
+            id: Math.random().toString(),
             name: listName || "Quick List",
             content: content
         };
 
-        setListToSend(listItem);
+        setListToSend(listItem); //not working
         return listItem;
     }
 
     const goToShoppingList = () => {
-        createListToSend(items)
-            console.log("listToSend", listToSend)
-            props.navigation.navigate('Shopping List', createListToSend(items));
+        console.log("listToSend", listToSend)
+        props.navigation.navigate('Shopping List', createListToSend(items));
         
 
     }
