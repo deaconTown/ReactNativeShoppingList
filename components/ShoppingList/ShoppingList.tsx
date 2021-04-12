@@ -6,13 +6,14 @@ import List from './List';
 import ListItem from './ListItem/ListItem';
 import { useFocusEffect } from '@react-navigation/native';
 import { createDBTables, insertShoppingList, db } from '../../database/ShoppingListDatabase/ShoppingListSchema';
-import * as SQLite from 'expo-sqlite';
+import SQLite from 'react-native-sqlite-storage';
 
 // const db = SQLite.openDatabase('ShoppingList.db');
 interface ListModel {
   id: string,
-  name: string,
-  content: ContentModel[]
+  title: string,
+  items: ContentModel[],
+  isMeal: boolean
 }
 
 interface ContentModel {
@@ -22,8 +23,7 @@ interface ContentModel {
 }
 
 export default function ShoppingList(props: any) {
-  const [isNewList, setIsNewList] = useState(false);
-  const [list, setList] = useState([]);
+  const [list, setList] = useState<ListModel[]>();
   const [shoppingLists, setShoppingLists] = useState([
     {
       id: Math.random().toString(),
@@ -48,160 +48,84 @@ export default function ShoppingList(props: any) {
     }
   ]);
 
-
-  // const db = SQLite.openDatabase('ShoppingList.db');
-
-  // React.useEffect(() => {
-  //   // db.transaction(tx => {
-  //   //   tx.executeSql(
-  //   //     "drop table if exists ShoppingLists"
-  //   //   );
-  //   //   tx.executeSql(
-  //   //     "drop table if exists Meals"
-  //   //   );
-  //   // });
-  //   getfromTable();
-
-  //   //create tables in ShoppingList Database
-  //   db.transaction(tx => {
-  //     tx.executeSql("PRAGMA foreign_keys=on");
-  //     tx.executeSql(`create table if not exists ShoppingLists (id 
-  //         integer not null primary key autoincrement, 
-  //         title nvarchar(50) null,
-  //         items nvarchar(1000) null,
-  //         qty nvarchar(1000) null,
-  //         mealId integer default 0 not null,
-  //         foreign key(mealId) references Meals(mealId) )`);
-
-  //     tx.executeSql(`CREATE TABLE IF NOT EXISTS Meals
-  //         (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-  //         M_API_Id NVARCHAR(50) NULL,
-  //         name NVARCHAR(50) NULL,
-  //         igredientNames NVARCHAR(50) NULL,
-  //         measurements NVARCHAR(250) NULL,
-  //         instructions NVARCHAR(1000) NULL,
-  //         category NVARCHAR(250) NULL,
-  //         area NVARCHAR(250) NULL,
-  //         tags NVARCHAR(250) NULL,
-  //         youTube_Link NVARCHAR(250) NULL,
-  //         image NVARCHAR(250) NULL)`);
-  //   })
-
-  //   createDBTables();
-  //   db.transaction(tx => {
-  //     tx.executeSql("select * from Meals", [], (tx, results) => {
-  //       console.log('Meals was selected', results.rows)
-  //     })
-  //     tx.executeSql("select items from ShoppingLists", [], (tx, results) => {
-  //       console.log('ShoppingLists was selected', results.rows)
-  //       // console.log('ShoppingLists.meals was selected', results.rows.)
-  //     }) 
-  //     tx.executeSql("select qty from ShoppingLists", [], (tx, results) => {
-  //       console.log('ShoppingLists was selected', results.rows)
-  //       // console.log('ShoppingLists.meals was selected', results.rows.)
-  //     })
-  //   })
-
-  //   // createDBTables();
-  // }, []);
-
   useEffect(() => {
     if (props.route.params !== undefined) {
-      setIsNewList(true);
-      addNewList(props.route.params)
+      addNewList(props.route.params); // TODO: SHOULD CHANGE TO GET ALL EXISTING LISTS
     }
     // createContent();   
+    let sqlDb = SQLite.openDatabase(
+      {
+        name: 'ShoppingList.db',
+        location: 'default',
+        createFromLocation: 2,
+      },
+      () =>{
+          Alert.alert('Connected with success!');
+          console.log("DB connected");
+        },
+      error => {
+        console.log("ShoppingList db error",error);
+      }
+    );
+  // const insertStatement = "INSERT INTO ShoppingList (id, title, items, isMeal) values (?,?,?,?)";
+  // INSERT INTO ShoppingList(id, title, items, isMeal) values ("testId2","testTitle2","testItems2",0)
+  const query = "SELECT * from ShoppingList;";
+
+  sqlDb.transaction(tx => {
+      tx.executeSql(query,[], (tx, results) => {
+
+        let dataLength = results.rows.length;       
+
+        if(dataLength > 0) {
+          let helperArray :ListModel[] = [] ;
+          for (let index = 0; index < dataLength; index++) {
+            // console.log("row",results.rows.item(index));
+            let data = results.rows.item(index);    
+            // console.log("data.items",data.items);
+            
+            let listItem : ListModel = {
+              id: data.id,
+              title:  data.title,
+              items: data.items,
+              isMeal: data.isMeal
+          };
+          // console.log("listItem",listItem.items);
+          // console.log("listItem substring",listItem.items.toString().substring(1, listItem.items.toString().length-1));
+          let formattedItems = listItem.items.toString().substring(1, listItem.items.toString().length-1);
+          console.log("formattedItems", formattedItems)
+          // let itemsArr = formattedItems.split("");
+          // console.log("itemsArr",itemsArr[0]);
+          for (let index = 0; index < listItem.items.length; index++) {
+            // console.log("listItem.items[index]",listItem.items[index]);
+          }
+
+
+            helperArray.push(listItem);
+          }
+
+          // console.log("helperArray",helperArray);
+
+          setList(helperArray);
+        }
+
+          
+          console.log("shoppingList screen results.rows.item",results.rows.item(0));
+          Alert.alert('Success', 'Shopping List was retrieved.');
+      },
+      (tx, err) => {
+          Alert.alert('Error', 'Shopping List was not retrieved.');
+          console.log('Inserting into shopping list table error',err, tx)
+      });
+  });
 
   }, [props.route.params]);
-
-  //get props from route and set up values to go into items state
-  // const createContent = () => {
-  //   var name = [] = [];
-  //   var qty = [] = [];
-  //   var tempContent = [];
-  //   if (props.route.params !== undefined) {
-  //     props.route.params.ingredientName.map((x) => {
-  //       name.push(x);
-  //     })
-  //     props.route.params.measurement.map((x) => {
-  //       qty.push(x);
-  //     })
-  //   }
-
-  //   for (let index = 0; index < name.length; index++) {
-  //     const n = name[index];
-  //     const q = qty[index];
-  //     tempContent.push({ id: Math.random(), name: n, qty: q });
-
-  //   }
-  //   if (props.route.params !== undefined) {
-  //     props.route.params.ingredientName.map((x) => {
-  //       name.push(x);
-  //     })
-  //     props.route.params.measurement.map((x) => {
-  //       qty.push(x);
-  //     })
-  //   }
-
-  //   for (let index = 0; index < name.length; index++) {
-  //     const n = name[index];
-  //     const q = qty[index];
-  //     tempContent.push({ id: Math.random(), name: n, qty: q });
-
-  //   }
-
-  //   addNewList(tempContent);
-  // }; //end of createContent
-
-  //getting items from table
-  //   const getfromTable = () => {
-  //     var res;
-  //     var name = [] = [];
-  //     var qty = [] = [];
-  //     var tempContent = [];
-
-  //     db.transaction(tx => {
-  //       tx.executeSql("select items from ShoppingLists", [], (tx, results) => {
-  //         console.log('ShoppingLists was selected', results.rows)
-  //         name.push(results.rows)
-  //       }) 
-  //       tx.executeSql("select qty from ShoppingLists", [], (tx, results) => {
-  //         console.log('ShoppingLists was selected', results.rows)
-  //         qty.push(results.rows)
-  //       })
-  //     })  
-
-  //   for (let index = 0; index < name.length; index++) {
-  //     const n = name[index];
-  //     const q = qty[index];
-  //     tempContent.push({ id: Math.random(), name: n, qty: q });
-
-  //   }
-
-  //   addListFromDb(tempContent);
-  // }; 
-
-  // const addListFromDb = (content: any) => {
-  //   console.log("addListFromDb")
-  //   if (content !== undefined) {
-  //     setShoppingLists(previousList => {
-  //       return {
-  //         ...previousList,
-  //         [content.tile]: { //TODO: Need to do check for duplicate eventually
-  //           id: content.id,
-  //           name: content.title,
-  //           content: content //this is not the state
-  //         }
-  //       }
-  //     });
-  //     // insertShoppingList(props.route.params.mealName, props.route.params.ingredientName.toString(), props.route.params.measurement.toString(), props.route.params.mealId);
-  //   }
-  // };//end of addNewList
 
   const addNewList = (content: ListModel) => {
     if (content !== undefined) {
 
-      setShoppingLists(previousList => [...previousList, content])
+      // setShoppingLists(previousList => [...previousList, content]);
+
+      // <InsertIntoShoppingListTable id={content.id} title={content.name} items={content.content.toString()} isMeal={false}/>
 
       // insertShoppingList(props.route.params.mealName, props.route.params.ingredientName.toString(), props.route.params.measurement.toString(), props.route.params.mealId);
     }
@@ -223,8 +147,9 @@ export default function ShoppingList(props: any) {
           />
           {
 
-            shoppingLists.map((x, key) => {
-              return <List data={x.content} title={x.name} fromMealList={isNewList} key={key} />
+            list?.map((x, key) => {
+              // console.log("list",x.items.toString(), x.id, x.title);
+              return <List data={x.items} title={x.title} fromMealList={false} id={x.id} key={key} />
             })
 
           }

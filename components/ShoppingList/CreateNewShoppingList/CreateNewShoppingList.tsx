@@ -3,6 +3,7 @@ import { View, Alert, FlatList, StyleSheet, Button, TextInput } from 'react-nati
 import AddItem from '../../AddItem'
 import ListItem from '../ListItem/ListItem';
 import { ScrollView } from 'react-native-gesture-handler';
+import SQLite from 'react-native-sqlite-storage';
 
 interface ListModel {
     id: string,
@@ -33,7 +34,7 @@ export default function CreateNewShoppingList(props: any) {
     // }, [items])
 
     const itemExists = (name: string) => {
-        return items.some(function (item) {
+        return items.some(function (item: ContentModel) {
             return item.name.toUpperCase() === name.toUpperCase();
         });
     }; //end of itemExists
@@ -67,15 +68,58 @@ export default function CreateNewShoppingList(props: any) {
     //     setMeasurements(tempMeasurement);
     // }
 
-    const deleteItem = (id: any) => {
+    const deleteItem = (id: number) => {
         setItems(prevItems => {
             return prevItems.filter(item => item.id != id);
         });
     };
+   
+
+    //   SQLite.openDatabase({name:'users', createFromLocation:1}, this.connected, this.failed)
+
+    const connected= () =>{
+        Alert.alert('Connected with success !')
+      }
+    
+    const failed= (e) =>{
+        Alert.alert('Something went wrong !', `${e}`)
+      }
+    
+      const insertShoppingListToDb = (id: string, title: string, items: string, isMeal: boolean) => new Promise((resolve, reject) => {
+        const sqlDb = SQLite.openDatabase(
+            {
+                name: 'ShoppingList.db',
+                location: 'Shared',
+                createFromLocation: '~www/ShoppingList.db',
+            },
+            () =>{
+                Alert.alert('Connected with success!');
+                console.log("DB connected");
+              },
+            error => {
+              console.log("CreateNewShoppingList db error",error);
+            }
+          );
+        const insertStatement = "INSERT INTO ShoppingList (id, title, items, isMeal) values (?,?,?,?)";
+        // INSERT INTO ShoppingList(id, title, items, isMeal) values ("testId2","testTitle2","testItems2",0)
+        // const query = "SELECT * FROM ";
+        const params = [id, title, items, isMeal];
+    
+        sqlDb.transaction(tx => {
+            tx.executeSql(insertStatement,params, (tx, results) => {
+                console.log("results",results);
+                Alert.alert('Success', 'Shopping List was saved.');
+            },
+            (tx, err) => {
+                Alert.alert('Error', 'Shopping List was not saved.');
+                console.log('Inserting into shopping list table error',err, tx)
+            });
+        });
+    });
 
     const onChangeName = (name: any) => setListName(name);
 
-    const createListToSend = (item: any) => {
+    const createListToSend = (item: ContentModel[]) => {
         let content: ContentModel[] = [];
         item.map(x => {
             content.push(x)
@@ -88,6 +132,8 @@ export default function CreateNewShoppingList(props: any) {
         };
 
         setListToSend(listItem); //not working
+
+        insertShoppingListToDb(listItem.id, listItem.name, listItem.content.toString(), false);
         return listItem;
     }
 

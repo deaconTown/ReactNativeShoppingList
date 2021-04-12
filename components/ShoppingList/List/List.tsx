@@ -7,7 +7,8 @@ import { Ionicons } from '@expo/vector-icons';
 interface Props {
     data : any,
     title : string,
-    fromMealList: boolean
+    fromMealList: boolean,
+    id: string
 }
 
 export default function List(props: Props) {
