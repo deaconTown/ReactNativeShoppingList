@@ -65,21 +65,24 @@ CREATE TABLE IF NOT EXISTS "ListItem" (
 
   sqlDb.transaction(tx => {
       tx.executeSql(MealTableQuery,[], (tx, results) => {
-        console.log("Success", "Meal table created",results);
+        // console.log("Success", "Meal table created",results);
+        console.log("Success", "Meal table created");
       },
       (tx, err) => {
           console.error('Error', 'Meal table',err, tx)
       });
 
       tx.executeSql(ShoppingListQuery,[], (tx, results) => {
-        console.log("Success", "ShoppingList table created",results);
+        // console.log("Success", "ShoppingList table created",results);
+        console.log("Success", "ShoppingList table created");
     },
     (tx, err) => {
       console.error('Error', 'ShoppingList table',err, tx)
     });
 
     tx.executeSql(ListItemTableQuery,[], (tx, results) => {
-      console.log("Success", "ListItem table created",results);
+      // console.log("Success", "ListItem table created",results);
+      console.log("Success", "ListItem table created");
   },
   (tx, err) => {
     console.error('Error', 'ListItem table',err, tx)
@@ -104,6 +107,7 @@ CREATE TABLE IF NOT EXISTS "ListItem" (
 
   return function cleanup () {
     sqlDb.close();
+    console.log("Closed database");
   } 
 
   }, []);

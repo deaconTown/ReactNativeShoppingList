@@ -3,6 +3,7 @@ import { FlatList, StyleSheet, TouchableOpacity, Text, View, SafeAreaView } from
 import { useState, useEffect } from "react";
 import ListItem from "../ListItem/ListItem";
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
 
 interface Props {
     data : any,
@@ -14,6 +15,7 @@ interface Props {
 export default function List(props: Props) {
     const [toggleList, setToggleList] = useState(false);
     const [items, setItems] = useState([]);
+    const navigation = useNavigation();
 
     useEffect(() => {
         console.log("props.data", props.data)
@@ -29,7 +31,7 @@ export default function List(props: Props) {
                         <>
                             <Text>
                                 <Ionicons name="md-checkmark-circle-outline" size={20} color="firebrick"
-                                    onPress={() => props.navigation.navigate('Home')} />
+                                    onPress={() => navigation.navigate('Home')} />
                             </Text>
                             <Text>
                                 <Ionicons name="md-close" size={20} color="firebrick"
@@ -44,7 +46,7 @@ export default function List(props: Props) {
         )
     }
 
-    const deleteItem = (id: any) => {
+    const deleteItem = (id: string) => {
         setItems(prevItems => {
             return prevItems.filter(item => item.id != id);
         });

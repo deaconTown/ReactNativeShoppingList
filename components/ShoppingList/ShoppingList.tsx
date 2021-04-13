@@ -24,7 +24,8 @@ interface ListModel {
 interface ContentModel {
   id: string,
   name: string,
-  qty: string
+  qty: string,
+  shoppingListId: string
 }
 
 export default function ShoppingList(props: any) {
@@ -44,8 +45,8 @@ export default function ShoppingList(props: any) {
         createFromLocation: 2,
       },
       () =>{
-          Alert.alert('Connected with success!');
-          console.log("DB connected");
+          // Alert.alert('Connected with success!');
+          console.log("DB connected [retrieve shoppingList]");
         },
       error => {
         console.log("ShoppingList db error",error);
@@ -72,12 +73,14 @@ export default function ShoppingList(props: any) {
             helperArray.push(listItem);
           }
           setList(helperArray);
+          console.log("list state updated");
         }          
-          console.log("shoppingList screen results.rows.item",results.rows.item);
-          Alert.alert('Success', 'Shopping List was retrieved.');
+          // console.log("shoppingList screen results.rows.item",results.rows.item);
+          // Alert.alert('Success', 'Shopping List was retrieved.');
+          console.log("DB connected [retrieve listItem]");
       },
       (tx, err) => {
-          Alert.alert('Error', 'Shopping List was not retrieved.');
+          // Alert.alert('Error', 'Shopping List was not retrieved.');
           console.log('Inserting into shopping list table error',err, tx)
       });
 
@@ -88,33 +91,45 @@ export default function ShoppingList(props: any) {
         if(dataLength > 0) {
           let helperArray :ContentModel[] = [] ;
           for (let index = 0; index < dataLength; index++) {
-            let data = results.rows.item(index);    
+            let data = results.rows.item(index);   
             
             let listItem : ContentModel = {
               id: data.id,
               name: data.name,
-              qty: data.qty
+              qty: data.qty, 
+              shoppingListId: data.shoppingListId
           };
             helperArray.push(listItem);
           }
           setListContent(helperArray);
+          console.log("listContent state updated");
         }          
-        console.log("Success", "list table retrieved",results);
-        console.log("List items",results.rows.item(0));
+        console.log("Success", "list table retrieved");
+        // console.log("Success", "list table retrieved",results);
+        // console.log("List items",results.rows.item(0));
       },
       (tx, err) => {
           console.error('Error', 'list table not retrieved',err, tx)
       });
   });
 
-  if(list){
+  
 
-    setUpShoppingList(list);
-  }
+  console.log("list in effect", list);
+  console.log("listContent in effect", listContent);
+  }, []);
+  //end of use effect
 
-  }, [props.route.params]);
+  useEffect(() => {
+    console.log("list in effect 2", list);
+  console.log("listContent in effect 2", listContent);
+    if(list && listContent){
 
-  const setUpShoppingList = (shoppingList: ListModel[]) => {
+      setUpShoppingList(list, listContent);
+    }
+  }, [])
+
+  const setUpShoppingList = (shoppingList: ListModel[], contentList: ContentModel[]) => {
     shoppingList.forEach(element => {
       let helperArray :ShoppingListModel[] = [] ;
           for (let index = 0; index < shoppingList.length; index++) {
@@ -123,12 +138,13 @@ export default function ShoppingList(props: any) {
             let listItem : ShoppingListModel = {
               id: shoppingList[index].id,
               title: shoppingList[index].title,
-              items: [],
+              items: contentList.filter(x => x.shoppingListId === shoppingList[index].id),
               isMeal: shoppingList[index].isMeal
               
           };
             helperArray.push(listItem);
           }
+          // console.log('listContent',listContent)
           console.log('helperArray',helperArray)
           setShoppingList(helperArray);
     });
