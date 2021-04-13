@@ -4,13 +4,8 @@
     <list default="true" id="53edc7c4-4e4a-43ca-a1a3-f04462cb5732" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Meals/MealDetail/MealDetail.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Meals/MealDetail/MealDetail.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/assets/www/ShoppingList.db.sqbpro" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/assets/www/ShoppingList.db.sqbpro" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/ShoppingList/CreateNewShoppingList/CreateNewShoppingList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ShoppingList/CreateNewShoppingList/CreateNewShoppingList.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ShoppingList/List/List.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ShoppingList/List/List.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ShoppingList/ShoppingList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ShoppingList/ShoppingList.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn-error.log" beforeDir="false" afterPath="$PROJECT_DIR$/yarn-error.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

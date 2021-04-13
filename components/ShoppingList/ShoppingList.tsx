@@ -9,50 +9,34 @@ import { createDBTables, insertShoppingList, db } from '../../database/ShoppingL
 import SQLite from 'react-native-sqlite-storage';
 
 // const db = SQLite.openDatabase('ShoppingList.db');
-interface ListModel {
+interface ShoppingListModel {
   id: string,
   title: string,
   items: ContentModel[],
   isMeal: boolean
 }
+interface ListModel {
+  id: string,
+  title: string,
+  isMeal: boolean
+}
 
 interface ContentModel {
-  id: number,
+  id: string,
   name: string,
-  qty: number
+  qty: string
 }
 
 export default function ShoppingList(props: any) {
+  const [shoppingList, setShoppingList] = useState<ShoppingListModel[]>();
+  const [listContent, setListContent] = useState<ContentModel[]>();
   const [list, setList] = useState<ListModel[]>();
-  const [shoppingLists, setShoppingLists] = useState([
-    {
-      id: Math.random().toString(),
-      name: 'List 1',
-      content: [
-        { id: Math.random(), name: 'Milk', qty: 1 },
-        { id: Math.random(), name: 'Bread2', qty: 2 },
-        { id: Math.random(), name: 'Eggs', qty: 12 },
-        { id: Math.random(), name: 'Juice', qty: 3 }
-      ]
-    },
-    {
-      id: Math.random().toString(),
-      name: 'List 2',
-      content:
-        [
-          { id: Math.random(), name: 'Bree', qty: 1 },
-          { id: Math.random(), name: 'Ghee', qty: 2 },
-          { id: Math.random(), name: 'Mouse', qty: 12 },
-          { id: Math.random(), name: 'Baking Soda', qty: 33 }
-        ]
-    }
-  ]);
 
   useEffect(() => {
     if (props.route.params !== undefined) {
       addNewList(props.route.params); // TODO: SHOULD CHANGE TO GET ALL EXISTING LISTS
     }
-    // createContent();   
+    // retrieve lists from db;   
     let sqlDb = SQLite.openDatabase(
       {
         name: 'ShoppingList.db',
@@ -67,60 +51,90 @@ export default function ShoppingList(props: any) {
         console.log("ShoppingList db error",error);
       }
     );
-  // const insertStatement = "INSERT INTO ShoppingList (id, title, items, isMeal) values (?,?,?,?)";
-  // INSERT INTO ShoppingList(id, title, items, isMeal) values ("testId2","testTitle2","testItems2",0)
-  const query = "SELECT * from ShoppingList;";
+
+  const shoppingListquery = "SELECT * from ShoppingList;";
+  const listItemQuery = "SELECT * from ListItem;";
 
   sqlDb.transaction(tx => {
-      tx.executeSql(query,[], (tx, results) => {
-
-        let dataLength = results.rows.length;       
+      tx.executeSql(shoppingListquery,[], (tx, results) => {
+        let dataLength = results.rows.length;   
 
         if(dataLength > 0) {
           let helperArray :ListModel[] = [] ;
           for (let index = 0; index < dataLength; index++) {
-            // console.log("row",results.rows.item(index));
             let data = results.rows.item(index);    
-            // console.log("data.items",data.items);
             
             let listItem : ListModel = {
               id: data.id,
               title:  data.title,
-              items: data.items,
               isMeal: data.isMeal
           };
-          // console.log("listItem",listItem.items);
-          // console.log("listItem substring",listItem.items.toString().substring(1, listItem.items.toString().length-1));
-          let formattedItems = listItem.items.toString().substring(1, listItem.items.toString().length-1);
-          console.log("formattedItems", formattedItems)
-          // let itemsArr = formattedItems.split("");
-          // console.log("itemsArr",itemsArr[0]);
-          for (let index = 0; index < listItem.items.length; index++) {
-            // console.log("listItem.items[index]",listItem.items[index]);
-          }
-
-
             helperArray.push(listItem);
           }
-
-          // console.log("helperArray",helperArray);
-
           setList(helperArray);
-        }
-
-          
-          console.log("shoppingList screen results.rows.item",results.rows.item(0));
+        }          
+          console.log("shoppingList screen results.rows.item",results.rows.item);
           Alert.alert('Success', 'Shopping List was retrieved.');
       },
       (tx, err) => {
           Alert.alert('Error', 'Shopping List was not retrieved.');
           console.log('Inserting into shopping list table error',err, tx)
       });
+
+      //get list items from db
+      tx.executeSql(listItemQuery,[], (tx, results) => {
+        let dataLength = results.rows.length;   
+
+        if(dataLength > 0) {
+          let helperArray :ContentModel[] = [] ;
+          for (let index = 0; index < dataLength; index++) {
+            let data = results.rows.item(index);    
+            
+            let listItem : ContentModel = {
+              id: data.id,
+              name: data.name,
+              qty: data.qty
+          };
+            helperArray.push(listItem);
+          }
+          setListContent(helperArray);
+        }          
+        console.log("Success", "list table retrieved",results);
+        console.log("List items",results.rows.item(0));
+      },
+      (tx, err) => {
+          console.error('Error', 'list table not retrieved',err, tx)
+      });
   });
+
+  if(list){
+
+    setUpShoppingList(list);
+  }
 
   }, [props.route.params]);
 
-  const addNewList = (content: ListModel) => {
+  const setUpShoppingList = (shoppingList: ListModel[]) => {
+    shoppingList.forEach(element => {
+      let helperArray :ShoppingListModel[] = [] ;
+          for (let index = 0; index < shoppingList.length; index++) {
+            // let data = shoppingList.rows.item(index);    
+            
+            let listItem : ShoppingListModel = {
+              id: shoppingList[index].id,
+              title: shoppingList[index].title,
+              items: [],
+              isMeal: shoppingList[index].isMeal
+              
+          };
+            helperArray.push(listItem);
+          }
+          console.log('helperArray',helperArray)
+          setShoppingList(helperArray);
+    });
+  }
+
+  const addNewList = (content: ShoppingListModel) => {
     if (content !== undefined) {
 
       // setShoppingLists(previousList => [...previousList, content]);
@@ -147,7 +161,7 @@ export default function ShoppingList(props: any) {
           />
           {
 
-            list?.map((x, key) => {
+            shoppingList?.map((x, key) => {
               // console.log("list",x.items.toString(), x.id, x.title);
               return <List data={x.items} title={x.title} fromMealList={false} id={x.id} key={key} />
             })
