@@ -15,9 +15,9 @@ export default function List(props: Props) {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
-        console.log("props.data", props.data)
+        // console.log("props.data", props.data)
         setItems(props.data);//TODO: Set Limit to 10 list max eventually
-    }, [])
+    }, [props.data])
 
     const Title = () => {
         return (
