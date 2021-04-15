@@ -148,7 +148,9 @@ export default function ShoppingList(props: any) {
   const addNewList = (content: ShoppingListModel) => {
     if (content !== undefined) {
 
-      // setShoppingLists(previousList => [...previousList, content])
+      // setShoppingLists(previousList => [...previousList, content]);
+
+      // <InsertIntoShoppingListTable id={content.id} title={content.name} items={content.content.toString()} isMeal={false}/>
 
       // insertShoppingList(props.route.params.mealName, props.route.params.ingredientName.toString(), props.route.params.measurement.toString(), props.route.params.mealId);
     }
@@ -169,8 +171,10 @@ export default function ShoppingList(props: any) {
             }}
           />
           {
-            shoppingList!.map((x, key) => {
-              return <List data={x.items} title={x.title} fromMealList={x.isMeal} key={key} />
+
+            shoppingList?.map((x, key) => {
+              // console.log("list",x.items.toString(), x.id, x.title);
+              return <List data={x.items} title={x.title} fromMealList={false} id={x.id} key={key} />
             })
 
           }

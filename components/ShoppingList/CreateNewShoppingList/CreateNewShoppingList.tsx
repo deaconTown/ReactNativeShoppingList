@@ -3,6 +3,7 @@ import { View, Alert, FlatList, StyleSheet, Button, TextInput } from 'react-nati
 import AddItem from '../../AddItem'
 import ListItem from '../ListItem/ListItem';
 import { ScrollView } from 'react-native-gesture-handler';
+import SQLite from 'react-native-sqlite-storage';
 
 interface ListModel {
     id: string,
@@ -33,7 +34,7 @@ export default function CreateNewShoppingList(props: any) {
     // }, [items])
 
     const itemExists = (name: string) => {
-        return items.some(function (item) {
+        return items.some(function (item: ContentModel) {
             return item.name.toUpperCase() === name.toUpperCase();
         });
     }; //end of itemExists
@@ -67,7 +68,7 @@ export default function CreateNewShoppingList(props: any) {
     //     setMeasurements(tempMeasurement);
     // }
 
-    const deleteItem = (id: any) => {
+    const deleteItem = (id: number) => {
         setItems(prevItems => {
             return prevItems.filter(item => item.id != id);
         });
@@ -159,7 +160,7 @@ export default function CreateNewShoppingList(props: any) {
 
     const onChangeName = (name: any) => setListName(name);
 
-    const createListToSend = (item: any) => {
+    const createListToSend = (item: ContentModel[]) => {
         let content: ContentModel[] = [];
         item.map(x => {
             content.push(x)
@@ -172,6 +173,8 @@ export default function CreateNewShoppingList(props: any) {
         };
 
         setListToSend(listItem); //not working
+
+        insertShoppingListToDb(listItem.id, listItem.name, listItem.content, false);
         return listItem;
     }
 
