@@ -43,7 +43,7 @@ export default function MealDetail(props: any) {
             id: meal.idMeal.toString(),
             name: meal.strMeal.toString(),
             content: content
-        };
+        };        
 
         return listItem;
     }
@@ -139,7 +139,8 @@ export default function MealDetail(props: any) {
                                     title="Send To ShoppingList"
                                     onPress={() => {
                                         /* 1. Navigate to the Details route with params */
-                                        goToShoppingList(item)
+                                        goToShoppingList(item);
+                                        meal: true
                                     }}
                                 />
                             </>
