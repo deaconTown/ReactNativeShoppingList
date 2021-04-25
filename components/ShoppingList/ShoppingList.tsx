@@ -5,28 +5,7 @@ import AddItem from '../AddItem/AddItem';
 import List from './List';
 import ListItem from './ListItem/ListItem';
 import { useFocusEffect } from '@react-navigation/native';
-import { createDBTables, insertShoppingList, db } from '../../database/ShoppingListDatabase/ShoppingListSchema';
 import SQLite from 'react-native-sqlite-storage';
-
-// const db = SQLite.openDatabase('ShoppingList.db');
-interface ShoppingListModel {
-  id: string,
-  title: string,
-  items: ContentModel[],
-  isMeal: boolean
-}
-interface ListModel {
-  id: string,
-  title: string,
-  isMeal: boolean
-}
-
-interface ContentModel {
-  id: string,
-  name: string,
-  qty: string,
-  shoppingListId: string
-}
 
 export default function ShoppingList(props: any) {
   const [shoppingList, setShoppingList] = useState<ShoppingListModel[]>();
@@ -34,10 +13,41 @@ export default function ShoppingList(props: any) {
   const [list, setList] = useState<ListModel[]>();
 
   useEffect(() => {
-    if (props.route.params !== undefined) {
-      addNewList(props.route.params); // TODO: SHOULD CHANGE TO GET ALL EXISTING LISTS
-    }
-    // retrieve lists from db;   
+    getShoppingLists();
+    getListItems();
+    // return () => {
+    //   cleanup
+    // }
+
+    console.log("list?.length", list?.length);
+    console.log("listContent?.length", listContent?.length);
+
+    //TODO: you can use useMemo() for values or useCallback() for functions 
+    
+  }, [list?.length, listContent?.length,props.route.params ])
+
+  const setUpShoppingList = (shoppingList: ListModel[], contentList: ContentModel[]) => {
+    console.log("setting up shopping list");
+    shoppingList.forEach(element => {
+      let helperArray :ShoppingListModel[] = [] ;
+          for (let index = 0; index < shoppingList.length; index++) {
+
+            let listItem : ShoppingListModel = {
+              id: shoppingList[index].id,
+              title: shoppingList[index].title,
+              items: contentList.filter(x => x.shoppingListId === shoppingList[index].id),
+              isMeal: shoppingList[index].isMeal
+              
+          };
+            helperArray.push(listItem);
+          }
+          setShoppingList(helperArray);
+        });
+        console.log("shoppingList updated");
+  }
+
+  const getShoppingLists = () => {
+    // retrieve shoppingLists from db;   
     let sqlDb = SQLite.openDatabase(
       {
         name: 'ShoppingList.db',
@@ -54,7 +64,6 @@ export default function ShoppingList(props: any) {
     );
 
   const shoppingListquery = "SELECT * from ShoppingList;";
-  const listItemQuery = "SELECT * from ListItem;";
 
   sqlDb.transaction(tx => {
       tx.executeSql(shoppingListquery,[], (tx, results) => {
@@ -75,15 +84,34 @@ export default function ShoppingList(props: any) {
           setList(helperArray);
           console.log("list state updated");
         }          
-          // console.log("shoppingList screen results.rows.item",results.rows.item);
-          // Alert.alert('Success', 'Shopping List was retrieved.');
           console.log("DB connected [retrieve listItem]");
       },
       (tx, err) => {
-          // Alert.alert('Error', 'Shopping List was not retrieved.');
           console.log('Inserting into shopping list table error',err, tx)
       });
+    });
+  }
+  //end of getShoppingList
 
+  const getListItems = () => {
+    // retrieve lists from db;   
+    let sqlDb = SQLite.openDatabase(
+      {
+        name: 'ShoppingList.db',
+        location: 'default',
+        createFromLocation: 2,
+      },
+      () =>{
+          console.log("DB connected [retrieve shoppingList]");
+        },
+      error => {
+        console.log("ShoppingList db error",error);
+      }
+    );
+
+  const listItemQuery = "SELECT * from ListItem;";
+
+  sqlDb.transaction(tx => {
       //get list items from db
       tx.executeSql(listItemQuery,[], (tx, results) => {
         let dataLength = results.rows.length;   
@@ -105,50 +133,17 @@ export default function ShoppingList(props: any) {
           console.log("listContent state updated");
         }          
         console.log("Success", "list table retrieved");
-        // console.log("Success", "list table retrieved",results);
-        // console.log("List items",results.rows.item(0));
+        if(list && listContent){    
+          setUpShoppingList(list, listContent);
+        }
       },
       (tx, err) => {
           console.error('Error', 'list table not retrieved',err, tx)
       });
   });
+}//end of getListItems
 
-  
 
-  console.log("list in effect", list);
-  console.log("listContent in effect", listContent);
-  }, []);
-  //end of use effect
-
-  useEffect(() => {
-    console.log("list in effect 2", list);
-  console.log("listContent in effect 2", listContent);
-    if(list && listContent){
-
-      setUpShoppingList(list, listContent);
-    }
-  }, [])
-
-  const setUpShoppingList = (shoppingList: ListModel[], contentList: ContentModel[]) => {
-    shoppingList.forEach(element => {
-      let helperArray :ShoppingListModel[] = [] ;
-          for (let index = 0; index < shoppingList.length; index++) {
-            // let data = shoppingList.rows.item(index);    
-            
-            let listItem : ShoppingListModel = {
-              id: shoppingList[index].id,
-              title: shoppingList[index].title,
-              items: contentList.filter(x => x.shoppingListId === shoppingList[index].id),
-              isMeal: shoppingList[index].isMeal
-              
-          };
-            helperArray.push(listItem);
-          }
-          // console.log('listContent',listContent)
-          console.log('helperArray',helperArray)
-          setShoppingList(helperArray);
-    });
-  }
 
   const addNewList = (content: ShoppingListModel) => {
     if (content !== undefined) {

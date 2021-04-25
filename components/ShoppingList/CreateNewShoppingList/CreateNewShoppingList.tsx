@@ -93,7 +93,7 @@ export default function CreateNewShoppingList(props: any) {
           createFromLocation: 2,
             },
             () =>{
-                Alert.alert('Connected with success!');
+                // Alert.alert('Connected with success!');
                 console.log("DB connected");
               },
             error => {
@@ -108,12 +108,13 @@ export default function CreateNewShoppingList(props: any) {
     
         sqlDb.transaction(tx => {
             tx.executeSql(shoppingListQuery,shoppingListparams, (tx, results) => {
-                console.log("results",results);
-                Alert.alert('Success', 'Shopping List was saved.');
+                console.log("inserted into shopping list table");
+                // console.log("results",results);
+                // Alert.alert('Success', 'Shopping List was saved.');
                 insertListItemsToDb(id, items);
             },
             (tx, err) => {
-                Alert.alert('Error', 'Shopping List was not saved.');
+                // Alert.alert('Error', 'Shopping List was not saved.');
                 console.log('Inserting into shopping list table error',err, tx)
             });
         });
@@ -127,8 +128,8 @@ export default function CreateNewShoppingList(props: any) {
                 createFromLocation: 2,
             },
             () =>{
-                Alert.alert('Connected with success for list item!');
-                console.log("DB connected for listitem");
+                // Alert.alert('Connected with success for list item!');
+                console.log("Success","DB connected for listitem");
               },
             error => {
               console.log("CreateNewShoppingList ListItem db error",error);
@@ -142,11 +143,12 @@ export default function CreateNewShoppingList(props: any) {
 
             sqlDb.transaction(tx => {
                 tx.executeSql(listItemQuery,listItemparams, (tx, results) => {
-                    console.log("listItem results",results);
-                    Alert.alert('Success', 'item was saved.');
+                    // console.log("listItem results",results);
+                    // Alert.alert('Success', 'item was saved.');
+                   console.log('Success', 'item was saved.');
                 },
                 (tx, err) => {
-                    Alert.alert('Error', 'item were not saved.');
+                    // Alert.alert('Error', 'item were not saved.');
                     console.log('Inserting into listItem table error',err, tx)
                 });
             });
