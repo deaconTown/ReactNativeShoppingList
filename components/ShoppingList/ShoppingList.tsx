@@ -6,6 +6,7 @@ import List from './List';
 import ListItem from './ListItem/ListItem';
 import { useFocusEffect } from '@react-navigation/native';
 import SQLite from 'react-native-sqlite-storage';
+import DeleteListItem from '../../database/DeleteListItem';
 
 export default function ShoppingList(props: any) {
   const [shoppingList, setShoppingList] = useState<ShoppingListModel[]>();
@@ -24,7 +25,9 @@ export default function ShoppingList(props: any) {
 
     //TODO: you can use useMemo() for values or useCallback() for functions 
     
-  }, [list?.length, listContent?.length,props.route.params ])
+  }, [list?.length, listContent?.length,props.route.params ]);
+
+  const deleteListItem : DeleteListItem = new DeleteListItem(props);
 
   const setUpShoppingList = (shoppingList: ListModel[], contentList: ContentModel[]) => {
     console.log("setting up shopping list");
@@ -143,18 +146,14 @@ export default function ShoppingList(props: any) {
   });
 }//end of getListItems
 
+const removeListItem = (id: string) => {
+  deleteListItem.DeleteItemFromListQuery(id);
 
+  let filteredListContent = listContent?.filter((s) => s.id !== id);
 
-  const addNewList = (content: ShoppingListModel) => {
-    if (content !== undefined) {
+  setListContent(filteredListContent);
 
-      // setShoppingLists(previousList => [...previousList, content]);
-
-      // <InsertIntoShoppingListTable id={content.id} title={content.name} items={content.content.toString()} isMeal={false}/>
-
-      // insertShoppingList(props.route.params.mealName, props.route.params.ingredientName.toString(), props.route.params.measurement.toString(), props.route.params.mealId);
-    }
-  };//end of addNewList
+}
 
   return (
     <>
@@ -174,7 +173,7 @@ export default function ShoppingList(props: any) {
 
             shoppingList?.map((x, key) => {
               // console.log("list",x.items.toString(), x.id, x.title);
-              return <List data={x.items} title={x.title} fromMealList={false} id={x.id} key={key} />
+              return <List data={x.items} title={x.title} fromMealList={false} id={x.id} key={key} deleteItem={removeListItem}/>
             })
 
           }

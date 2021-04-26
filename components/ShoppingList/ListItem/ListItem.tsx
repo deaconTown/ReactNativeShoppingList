@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, CheckBox } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import DeleteListItem from '../../../database/DeleteListItem';
 
 const ListItem = (props : any) => {
     const [isSelected, setSelection] = useState(false);
@@ -8,6 +9,8 @@ const ListItem = (props : any) => {
     const onCheck = () => {
 
     }
+
+    const deleteListItem : DeleteListItem = new DeleteListItem(props);
 
     return (
         <TouchableOpacity style={isSelected? styles.listItemSelected : styles.listItem} disabled={isSelected? true: false}>

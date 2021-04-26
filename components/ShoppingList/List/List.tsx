@@ -9,7 +9,8 @@ interface Props {
     data : any,
     title : string,
     fromMealList: boolean,
-    id: string
+    id: string,
+    deleteItem: (id: string) => void;
 }
 
 export default function List(props: Props) {
@@ -61,7 +62,7 @@ export default function List(props: Props) {
                         <FlatList style={styles.flatList} data={items} renderItem={({ item }) => (
                             <ListItem
                                 item={item}
-                                deleteItem={deleteItem}
+                                deleteItem={props.deleteItem}
                             />
                         )}
                             keyExtractor={item => item.id} />
