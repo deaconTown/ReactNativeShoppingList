@@ -147,11 +147,20 @@ export default function ShoppingList(props: any) {
 }//end of getListItems
 
 const removeListItem = (id: string) => {
-  deleteListItem.DeleteItemFromListQuery(id);
+  deleteListItem.DeleteItemFromListQuery(id, true);
 
-  let filteredListContent = listContent?.filter((s) => s.id !== id);
+  let filteredListContent = listContent?.filter((c) => c.id !== id);
 
   setListContent(filteredListContent);
+
+}
+
+const removeShoppingList = (id: string) => {
+  deleteListItem.DeleteShoppingListQuery(id, listContent);
+
+  let filteredShoppingList = shoppingList?.filter((s) => s.id !== id);
+
+  setShoppingList(filteredShoppingList);
 
 }
 
@@ -159,7 +168,7 @@ const removeListItem = (id: string) => {
     <>
       {/* <Button title="Meals" onPress={()=> props.navigation.navigate('Meals')}/> */}
       <ScrollView style={styles.container}>
-        <Header />
+        <Header/>
         <View style={styles.body}>
           <Button
             title="New Shopping List"
@@ -173,7 +182,13 @@ const removeListItem = (id: string) => {
 
             shoppingList?.map((x, key) => {
               // console.log("list",x.items.toString(), x.id, x.title);
-              return <List data={x.items} title={x.title} fromMealList={false} id={x.id} key={key} deleteItem={removeListItem}/>
+              return <List 
+              data={x.items} 
+              title={x.title} 
+              fromMealList={false} 
+              id={x.id} key={key} 
+              deleteItem={removeListItem} 
+              deleteShoppingList={removeShoppingList}/>
             })
 
           }

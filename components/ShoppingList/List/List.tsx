@@ -1,5 +1,5 @@
 import * as React from "react";
-import { FlatList, StyleSheet, TouchableOpacity, Text, View, SafeAreaView } from "react-native";
+import { FlatList, StyleSheet, TouchableOpacity, Text, View, SafeAreaView, Alert } from "react-native";
 import { useState, useEffect } from "react";
 import ListItem from "../ListItem/ListItem";
 import { Ionicons } from '@expo/vector-icons';
@@ -11,6 +11,7 @@ interface Props {
     fromMealList: boolean,
     id: string,
     deleteItem: (id: string) => void;
+    deleteShoppingList: (id: string) => void;
 }
 
 export default function List(props: Props) {
@@ -40,7 +41,12 @@ export default function List(props: Props) {
                             </Text>
                         </>
                         :
-                        <Text > </Text>
+                        <>
+                            <Text>
+                                <Ionicons name="md-close" size={20} color="firebrick"
+                                    onPress={() => props.deleteShoppingList(props.id)} />
+                            </Text>
+                        </>
                     }
                 </Text>
             </TouchableOpacity>

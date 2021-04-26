@@ -34,7 +34,8 @@ ExecuteQuery = (
     failuresMsg?: string,
     clientFailureSuccessMsg?: string,
     dbConnectTrans?: string,
-    dbFailedToConnectMsg?: string
+    dbFailedToConnectMsg?: string,
+    alert?: boolean
 
 ) => new Promise((resolve, reject) => {
     //   ExecuteQuery = (sql: string, params : any[]) => new Promise((resolve, reject) => {
@@ -55,7 +56,7 @@ ExecuteQuery = (
         trans.executeSql(sql, params, (trans, results) => {
             resolve(results);
             console.log(successMsg);
-            Alert.alert('Success', clientSuccessMsg);
+            alert ? Alert.alert('Success', clientSuccessMsg) : null
         },
             (error) => {
                 reject(error);

@@ -57,18 +57,53 @@ export default class DeleteListItem extends React.Component<Props, State> {
 
 
 
-    async DeleteItemFromListQuery(id: string) {
+    async DeleteItemFromListQuery(id: string, alert?: boolean) {
+        console.log("Removing listItem with id: " + id)
+
         const query = 'DELETE FROM ListItem WHERE id = ?';
         const params = [id];
         this.ExecuteQuery.ExecuteQuery(
             query,
             params,
-            "record successfully deleted from ListItem table",
+            "Record successfully deleted from ListItem table",
             'Item was deleted.',
             'Issue deleting record from ListItem table',
             '',
             'Delete List Item',
-            'Failed to connect to DB when deleting record from ListItem table'
+            'Failed to connect to DB when deleting record from ListItem table',
+            alert
         );
+    }
+
+    async DeleteShoppingListQuery(id: string, listContent?: ContentModel[]) {
+        console.log("Removing shoppingList with id: " + id)
+
+        const query = 'DELETE FROM ShoppingList WHERE id = ?';
+        const params = [id];
+        this.ExecuteQuery.ExecuteQuery(
+            query,
+            params,
+            "Record successfully deleted from ShoppingList table",
+            'Shopping list was deleted.',
+            'Issue deleting record from ShoppingList table',
+            '',
+            'Delete Shopping List',
+            'Failed to connect to DB when deleting record from ShoppingList table',
+            true
+        );
+
+
+
+        console.log("Removing all listItems associated with shoppingList with id: " + id)
+
+        let filteredListContent = listContent?.filter((x) => x.shoppingListId == id);
+
+        if (filteredListContent) {
+            filteredListContent.forEach(element => {
+                this.DeleteItemFromListQuery(element.id, false);
+            });
+        }
+
+
     }
 }
