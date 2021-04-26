@@ -3,35 +3,14 @@ import { View, Alert, FlatList, StyleSheet, Button, TextInput } from 'react-nati
 import AddItem from '../../AddItem'
 import ListItem from '../ListItem/ListItem';
 import { ScrollView } from 'react-native-gesture-handler';
-import SQLite from 'react-native-sqlite-storage';
-
-interface ListModel {
-    id: string,
-    name: string,
-    content: ContentModel[]
-}
-
-interface ContentModel {
-    id: number,
-    name: string,
-    qty: number
-}
+import InsertShoppingList from '../../../database/InsertShoppingList/InsertShoppingList';
 
 export default function CreateNewShoppingList(props: any) {
     const [items, setItems] = useState([]);
-    const [ingredientNames, setIngredientNames] = useState(['']);
-    const [measurements, setMeasurements] = useState(['']);
-    const [ingredients, setIngredients] = useState(['']);
-    const [isLoading, setLoading] = useState(true);
     const [listName, setListName] = useState('');
     const [listToSend, setListToSend] = useState<Partial<ListModel>>({});
 
-    // useEffect(() => {
-
-    //     // getIngredientsList();
-    //     console.log("items", items)
-
-    // }, [items])
+    const insert : InsertShoppingList = new InsertShoppingList(props);
 
     const itemExists = (name: string) => {
         return items.some(function (item: ContentModel) {
@@ -57,110 +36,15 @@ export default function CreateNewShoppingList(props: any) {
         }
     }
 
-    // const getIngredientsList = () => {
-    //     var tempIngr: string[] = [];
-    //     var tempMeasurement: string[] = [];
-    //     items.map((x) => {
-    //         tempIngr.push(x.name);
-    //         tempMeasurement.push(x.qty.toString());
-    //     });
-    //     setIngredientNames(tempIngr);
-    //     setMeasurements(tempMeasurement);
-    // }
-
     const deleteItem = (id: number) => {
         setItems(prevItems => {
             return prevItems.filter(item => item.id != id);
         });
     };
-   
-
-    //   SQLite.openDatabase({name:'users', createFromLocation:1}, this.connected, this.failed)
-
-    const connected= () =>{
-        Alert.alert('Connected with success !')
-      }
-    
-    const failed= (e) =>{
-        Alert.alert('Something went wrong !', `${e}`)
-      }
-    
-      const insertShoppingListToDb = (id: string, title: string, items: ContentModel[], isMeal: boolean) => new Promise((resolve, reject) => {
-        const sqlDb = SQLite.openDatabase(
-            {
-                name: 'ShoppingList.db',
-          location: 'default',
-          createFromLocation: 2,
-            },
-            () =>{
-                // Alert.alert('Connected with success!');
-                console.log("DB connected");
-              },
-            error => {
-              console.log("CreateNewShoppingList db error",error);
-            }
-          );
-        const shoppingListQuery = "INSERT INTO ShoppingList (id, title, isMeal) values (?,?,?)";
-        // INSERT INTO ShoppingList(id, title, items, isMeal) values ("testId2","testTitle2","testItems2",0)
-        // const query = "SELECT * FROM ";
-        const shoppingListparams = [id, title, isMeal];
-        const listItemparams = [Math.random.toString(), "test", "qty", id];
-    
-        sqlDb.transaction(tx => {
-            tx.executeSql(shoppingListQuery,shoppingListparams, (tx, results) => {
-                console.log("inserted into shopping list table");
-                // console.log("results",results);
-                // Alert.alert('Success', 'Shopping List was saved.');
-                insertListItemsToDb(id, items);
-            },
-            (tx, err) => {
-                // Alert.alert('Error', 'Shopping List was not saved.');
-                console.log('Inserting into shopping list table error',err, tx)
-            });
-        });
-    });
-
-    const insertListItemsToDb = (id: string, items: ContentModel[]) => new Promise((resolve, reject) => {
-        const sqlDb = SQLite.openDatabase(
-            {
-                name: 'ShoppingList.db',
-                location: 'default',
-                createFromLocation: 2,
-            },
-            () =>{
-                // Alert.alert('Connected with success for list item!');
-                console.log("Success","DB connected for listitem");
-              },
-            error => {
-              console.log("CreateNewShoppingList ListItem db error",error);
-            }
-          );
-
-        const listItemQuery = "INSERT INTO ListItem (id, name, qty, shoppingListId) values (?,?,?,?)";
-
-        items.forEach(x => {
-            const listItemparams = [x.id, x.name, x.qty, id];
-
-            sqlDb.transaction(tx => {
-                tx.executeSql(listItemQuery,listItemparams, (tx, results) => {
-                    // console.log("listItem results",results);
-                    // Alert.alert('Success', 'item was saved.');
-                   console.log('Success', 'item was saved.');
-                },
-                (tx, err) => {
-                    // Alert.alert('Error', 'item were not saved.');
-                    console.log('Inserting into listItem table error',err, tx)
-                });
-            });
-        })
-        
-    });
-
-
 
     const onChangeName = (name: any) => setListName(name);
 
-    const createListToSend = (item: ContentModel[]) => {
+    const addNewShoppingList = (item: ContentModel[]) => {
         let content: ContentModel[] = [];
         item.map(x => {
             content.push(x)
@@ -168,19 +52,23 @@ export default function CreateNewShoppingList(props: any) {
         })
         let listItem : ListModel = {
             id: Math.random().toString(),
-            name: listName || "Quick List",
-            content: content
+            title: listName || "Quick List",
+            isMeal: false
         };
 
         setListToSend(listItem); //not working
 
-        insertShoppingListToDb(listItem.id, listItem.name, listItem.content, false);
-        return listItem;
+        // insertShoppingListToDb(listItem.id, listItem.title, listItem.isMeal);
+
+        insert.insertShoppingListToDb(listItem.id, listItem.title, items, listItem.isMeal);
+        
+        return true;
     }
 
     const goToShoppingList = () => {
-        console.log("listToSend", listToSend)
-        props.navigation.navigate('Shopping List', createListToSend(items));
+        // console.log("listToSend", listToSend)
+        // addNewShoppingList(items);
+        props.navigation.navigate('Shopping List', addNewShoppingList(items));
         
 
     }
