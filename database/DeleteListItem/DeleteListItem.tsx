@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Alert } from "react-native";
 import SQLite from 'react-native-sqlite-storage';
+import ExecuteQuery from "../ExecuteQuery/ExecuteQuery";
 
 export interface Props {
     children?: React.ReactNode
@@ -10,6 +11,7 @@ export interface State {
 }
 
 export default class DeleteListItem extends React.Component<Props, State> {
+    ExecuteQuery: ExecuteQuery = new ExecuteQuery(this.props);
 
     constructor(props: Props) {
         super(props)
@@ -53,56 +55,12 @@ export default class DeleteListItem extends React.Component<Props, State> {
     // });
     //end of deleteSingleListItem
 
-    /**
-* Execute sql queries
-* 
-* @param sql
-* @param params
-* 
-* @returns {resolve} results
-*/
-    ExecuteQuery = (
-        sql: string,
-        params: any[],
-        successMsg?: string,
-        clientSuccessMsg?: string,
-        failuresMsg?: string,
-        clientFailureSuccessMsg?: string,
-        dbConnectTrans?: string,
-        dbFailedToConnectMsg?: string
 
-    ) => new Promise((resolve, reject) => {
-        //   ExecuteQuery = (sql: string, params : any[]) => new Promise((resolve, reject) => {
-        const sqlDb = SQLite.openDatabase(
-            {
-                name: 'ShoppingList.db',
-                location: 'default',
-                createFromLocation: 2,
-            },
-            () => {
-                console.log("DB connected " + dbConnectTrans);
-            },
-            (error: any) => {
-                console.log(dbFailedToConnectMsg, error);
-            }
-        );
-        sqlDb.transaction((trans) => {
-            trans.executeSql(sql, params, (trans, results) => {
-                resolve(results);
-                console.log(successMsg);
-                Alert.alert('Success', clientSuccessMsg);
-            },
-                (error) => {
-                    reject(error);
-                    console.log(failuresMsg, error, trans)
-                });
-        });
-    });
 
     async DeleteItemFromListQuery(id: string) {
         const query = 'DELETE FROM ListItem WHERE id = ?';
         const params = [id];
-        this.ExecuteQuery(
+        this.ExecuteQuery.ExecuteQuery(
             query,
             params,
             "record successfully deleted from ListItem table",
