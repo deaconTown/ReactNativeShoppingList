@@ -9,7 +9,7 @@ Uses async axios to fetch data from api.
 
 Functions include:
 1. Create new shopping lists (Lists not saving DB [coming soon]).
-2. Remove existing shopping lists [comming soon].
+2. Remove existing shopping lists [coming soon].
 3. Edit existing shopping lists (so far remove item from list).
 4. Search/Generate a meal by: alphabet, name, category - beef, fish; ingredients, etc.
 5. Add fetched meal ingredients to a new shopping list.
