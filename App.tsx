@@ -1,72 +1,120 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, FlatList, Alert, ActivityIndicator } from 'react-native';
 import Header from './components/Header/Header';
 import { uuid } from 'uuidv4';
-import ListItem from './components/ListItem/ListItem';
+import ListItem from './components/ShoppingList/ListItem/ListItem';
 import AddItem from './components/AddItem/AddItem';
+// import Navigator from './routes/homeStack/'
+import TabNavigator from './routes/TabNavigator';
+import StackNavigator from './routes/StackNavigator';
+import DrawerNavigator from './routes/DrawerNavigator';
+import SQLite from 'react-native-sqlite-storage';
 
 const App = () => {
-  const [items, setItems] = useState([
-    { id: Math.random(), name: 'Milk', qty: 1 },
-    { id: Math.random(), name: 'Bread', qty: 2 },
-    { id: Math.random(), name: 'Eggs', qty: 12 },
-    { id: Math.random(), name: 'Juice', qty: 3 }
-  ]);
-  const [isEdit, setisEdit] = useState(false);
-
-  const [selectedItem, setselectedItem] = useState({});
-
-  const editItem = (id: any, name: string, qty: string, isEdit: boolean) => {
-    // setItems(prevItems => {
-    //   return prevItems.filter(item => item.id != id);
-    // });
-    setselectedItem({id, name, qty});
-    setisEdit(isEdit);
-    console.log("Edit pressed");
-  };
-
-  const deleteItem = (id: any) => {
-    setItems(prevItems => {
-      return prevItems.filter(item => item.id != id);
-    });
-  };
-
-  const itemExists = (name: string) =>{
-    return items.some(function(item) {
-      return item.name.toUpperCase() === name.toUpperCase();
-    }); 
-  }
+  useEffect(() => {
    
-  const addItem = (text: string, qty: number) => {
-  if(itemExists(text)){
-      Alert.alert('Error', 'Item already exist');
-    }
-    else{
+    let sqlDb = SQLite.openDatabase(
+      {
+          name: 'ShoppingList.db',
+          location: 'default',
+          createFromLocation: 2,
+      },
+      () =>{
+          Alert.alert('Connected with success!');
+          console.log("DB connected from app.tsx");
+        },
+      error => {
+        console.log("App db error from app.tsx",error);
+      }
+    );
 
-      if (!text) {
-        Alert.alert('Error', 'Please enter an item');
+  let MealTableQuery = `
+  CREATE TABLE IF NOT EXISTS "Meal" (
+    "id"	TEXT NOT NULL UNIQUE,
+    "name"	TEXT,
+    "ingredients"	TEXT,
+    "measurements"	TEXT,
+    "instructions"	TEXT,
+    "category"	TEXT,
+    "area"	TEXT,
+    "tags"	TEXT,
+    "youtubeLink"	TEXT,
+    "image"	BLOB,
+    PRIMARY KEY("id")
+  );  
+`;
+let ShoppingListQuery = `
+  CREATE TABLE IF NOT EXISTS "ShoppingList" (
+    "id"	TEXT NOT NULL UNIQUE,
+    "title"	TEXT,
+    "isMeal"	INTEGER,
+    PRIMARY KEY("id"),
+    FOREIGN KEY("isMeal") REFERENCES "Meal"("id")
+    );
+`;
+let ListItemTableQuery = `
+CREATE TABLE IF NOT EXISTS "ListItem" (
+	"id"	TEXT NOT NULL UNIQUE,
+	"name"	TEXT,
+	"qty"	TEXT,
+	"shoppingListId"	TEXT NOT NULL,
+	PRIMARY KEY("id"),
+	FOREIGN KEY("shoppingListId") REFERENCES "ShoppingList"("id")
+);
+`;
+
+  sqlDb.transaction(tx => {
+      tx.executeSql(MealTableQuery,[], (tx, results) => {
+        // console.log("Success", "Meal table created",results);
+        console.log("Success", "Meal table created");
+      },
+      (tx, err) => {
+          console.error('Error', 'Meal table',err, tx)
+      });
+
+      tx.executeSql(ShoppingListQuery,[], (tx, results) => {
+        // console.log("Success", "ShoppingList table created",results);
+        console.log("Success", "ShoppingList table created");
+    },
+    (tx, err) => {
+      console.error('Error', 'ShoppingList table',err, tx)
+    });
+
+    tx.executeSql(ListItemTableQuery,[], (tx, results) => {
+      // console.log("Success", "ListItem table created",results);
+      console.log("Success", "ListItem table created");
+  },
+  (tx, err) => {
+    console.error('Error', 'ListItem table',err, tx)
+  });
+  });
+
+  let tables = ['ShoppingList', 'Meal', 'ListItem'];
+
+  tables.forEach(table => {
+    sqlDb.transaction(tx => {
+      tx.executeSql("select DISTINCT tbl_name from sqlite_master where tbl_name = '"+table+"'",[], (tx, results) => {
+    
+      if(results.rows.length > 0 ){
+           console.log(table + " exits");
+      }else{
+          console.log(table + " does not exits");
       }
-      else {
-        setItems(prevItems => {
-          return [{ id: Math.random(), name: text, qty }, ...prevItems]
-        });
-  
-      }
-    }
-  }
+      //alert(DataBase.tabelaExiste);
+  })  
+});
+});
+
+  return function cleanup () {
+    sqlDb.close();
+    console.log("Closed database");
+  } 
+
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Header />
-      <AddItem addItem={addItem} editItem={selectedItem} isEdit={isEdit}/>
-      <FlatList data={items} renderItem={({ item }) => (
-        <ListItem
-          item={item}
-          deleteItem={deleteItem}
-          editItem = {editItem}
-        />
-      )}
-        keyExtractor={item => item.id.toString()} />
+      <StackNavigator />
     </View>
   )
 };
@@ -74,8 +122,16 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60
+    // paddingTop: 30,
+    minHeight: 100,
+    position: 'relative'
   },
+  flatList: {
+    position: 'relative',
+    display: 'flex'
+  }
 });
+
+
 
 export default App;
