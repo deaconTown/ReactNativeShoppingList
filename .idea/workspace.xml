@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="53edc7c4-4e4a-43ca-a1a3-f04462cb5732" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/src/main/assets/www/ShoppingList.db.sqbpro" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/assets/www/ShoppingList.db.sqbpro" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ShoppingList/CreateNewShoppingList/CreateNewShoppingList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ShoppingList/CreateNewShoppingList/CreateNewShoppingList.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/assets/index.android.bundle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ShoppingList/List/List.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ShoppingList/List/List.tsx" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

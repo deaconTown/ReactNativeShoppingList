@@ -36,7 +36,7 @@ export default function CreateNewShoppingList(props: any) {
         }
     }
 
-    const deleteItem = (id: number) => {
+    const deleteItem = (id: string) => {
         setItems(prevItems => {
             return prevItems.filter(item => item.id != id);
         });

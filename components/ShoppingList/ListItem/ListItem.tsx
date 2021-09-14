@@ -2,7 +2,13 @@ import React, {useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, CheckBox } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const ListItem = (props : any) => {
+export interface Props {
+    children?: React.ReactNode,
+    deleteItem: (id: string) => void;
+    item: any
+  }
+
+const ListItem = (props : Props) => {
     const [isSelected, setSelection] = useState(false);
 
     const onCheck = () => {
