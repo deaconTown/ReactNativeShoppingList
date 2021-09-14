@@ -12,6 +12,7 @@ interface Props {
     id: string,
     deleteItem: (id: string) => void;
     deleteShoppingList: (id: string) => void;
+    editShoppingList: (id: string, name: string) => void;
 }
 
 export default function List(props: Props) {
@@ -22,12 +23,16 @@ export default function List(props: Props) {
     useEffect(() => {
         // console.log("props.data", props.data)
         setItems(props.data);//TODO: Set Limit to 10 list max eventually
-    }, [props.data])
+    }, [props.data]);
 
     const Title = () => {
         return (
             <TouchableOpacity style={styles.btn} onPress={() => setToggleList(!toggleList)}>
                 <View style={{ flex: 1, flexDirection: 'row' }}>
+                    <View >
+                    <Ionicons name="md-create" size={20} color="blue"
+                                        onPress={() => props.editShoppingList(props.id, props.title)} />
+                    </View>
                     <View style={{ flex: 1}} >
                         <Text style={props.fromMealList ? styles.btnTextWithIcon : styles.btnText}>{props.title}</Text>
                     </View>
@@ -46,7 +51,7 @@ export default function List(props: Props) {
                                 </>
                                 :
                                 <>
-                                    <Ionicons name="md-close" size={20} color="firebrick"
+                                    <Ionicons name="md-trash" size={20} color="firebrick"
                                         onPress={() => props.deleteShoppingList(props.id)} />
                                 </>
                             }
@@ -58,11 +63,11 @@ export default function List(props: Props) {
         )
     }
 
-    const deleteItem = (id: string) => {
-        setItems(prevItems => {
-            return prevItems.filter(item => item.id != id);
-        });
-    };
+    // const deleteItem = (id: string) => {
+    //     setItems(prevItems => {
+    //         return prevItems.filter(item => item.id != id);
+    //     });
+    // };
 
     return (
         <>

@@ -5,12 +5,33 @@ import ListItem from '../ListItem/ListItem';
 import { ScrollView } from 'react-native-gesture-handler';
 import InsertShoppingList from '../../../database/InsertShoppingList/InsertShoppingList';
 
-export default function CreateNewShoppingList(props: any) {
-    const [items, setItems] = useState([]);
+interface Props {
+    children?: React.ReactNode,
+    addItem: (text: string, qty: string) => void,
+    listItem?: ContentModel[],
+    route: any,
+    navigation: any
+}
+
+export default function CreateNewShoppingList(props: Props) {
+    const [items, setItems] = useState<ContentModel[]>([]);
     const [listName, setListName] = useState('');
     const [listToSend, setListToSend] = useState<Partial<ListModel>>({});
 
     const insert : InsertShoppingList = new InsertShoppingList(props);
+
+    const {isEdit, shoppingListId, listContent, shoppingListName} = props.route.params;
+
+    useEffect(() => {
+        console.log("isEdit", isEdit);
+        console.log("id", shoppingListId);
+        console.log("listContent", listContent);
+
+        if(isEdit){
+            setItems(listContent);
+        }
+   
+    }, [])
 
     const itemExists = (name: string) => {
         return items.some(function (item: ContentModel) {
@@ -84,10 +105,10 @@ export default function CreateNewShoppingList(props: any) {
                     autoCompleteType="name"
                     // autoFocus= {true}
                     keyboardType="default"
-                    defaultValue='Quick List' //TODO: Not working
+                    defaultValue= {isEdit ? shoppingListName : 'Quick List'}
                 />
-                <AddItem addItem={addItem} />
-                <FlatList style={styles.flatList} data={items} renderItem={({ item }) => (
+                <AddItem addItem={addItem} isEdit={isEdit} listItem={listContent} name={shoppingListName}/>
+                <FlatList style={styles.flatList} data={isEdit? items.filter(x => x.shoppingListId == shoppingListId): items } renderItem={({ item }) => (
                     <ListItem
                         item={item}
                         deleteItem={deleteItem}
@@ -95,7 +116,7 @@ export default function CreateNewShoppingList(props: any) {
                 )}
                     keyExtractor={item => item.id} />
                 <Button
-                    title="Create New Shopping List"
+                    title= {isEdit ? "Edit Shopping List": "Create New Shopping List"}
                     onPress={() =>
                         /* 1. Navigate to the Details route with params */
                         goToShoppingList()
