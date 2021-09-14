@@ -96,6 +96,7 @@ export default class DeleteListItem extends React.Component<Props, State> {
 
         console.log("Removing all listItems associated with shoppingList with id: " + id)
 
+        //getting all list items associated with selected shoppingList
         let filteredListContent = listContent?.filter((x) => x.shoppingListId == id);
 
         if (filteredListContent) {

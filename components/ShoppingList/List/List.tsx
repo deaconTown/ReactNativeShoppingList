@@ -6,8 +6,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 
 interface Props {
-    data : any,
-    title : string,
+    data: any,
+    title: string,
     fromMealList: boolean,
     id: string,
     deleteItem: (id: string) => void;
@@ -27,28 +27,33 @@ export default function List(props: Props) {
     const Title = () => {
         return (
             <TouchableOpacity style={styles.btn} onPress={() => setToggleList(!toggleList)}>
-                <Text style={props.fromMealList ? styles.btnTextWithIcon : styles.btnText}>{props.title} </Text>
-                <Text>
-                    {props.fromMealList ?
-                        <>
-                            <Text>
-                                <Ionicons name="md-checkmark-circle-outline" size={20} color="firebrick"
-                                    onPress={() => navigation.navigate('Home')} />
-                            </Text>
-                            <Text>
-                                <Ionicons name="md-close" size={20} color="firebrick"
-                                    onPress={() => { }} />
-                            </Text>
-                        </>
-                        :
-                        <>
-                            <Text>
-                                <Ionicons name="md-close" size={20} color="firebrick"
-                                    onPress={() => props.deleteShoppingList(props.id)} />
-                            </Text>
-                        </>
-                    }
-                </Text>
+                <View style={{ flex: 1, flexDirection: 'row' }}>
+                    <View style={{ flex: 1}} >
+                        <Text style={props.fromMealList ? styles.btnTextWithIcon : styles.btnText}>{props.title}</Text>
+                    </View>
+                    <View>
+                        <Text>
+                            {props.fromMealList ?
+                                <>
+                                    <Text>
+                                        <Ionicons name="md-checkmark-circle-outline" size={20} color="firebrick"
+                                            onPress={() => navigation.navigate('Home')} />
+                                    </Text>
+                                    <Text>
+                                        <Ionicons name="md-close" size={20} color="firebrick"
+                                            onPress={() => { }} />
+                                    </Text>
+                                </>
+                                :
+                                <>
+                                    <Ionicons name="md-close" size={20} color="firebrick"
+                                        onPress={() => props.deleteShoppingList(props.id)} />
+                                </>
+                            }
+                        </Text>
+                    </View>
+
+                </View>
             </TouchableOpacity>
         )
     }
@@ -87,6 +92,7 @@ const styles = StyleSheet.create({
         paddingTop: 0,
         minHeight: 100,
         position: 'relative',
+        flexDirection: 'column'
     },
     body: {
         marginTop: 10,
@@ -99,7 +105,7 @@ const styles = StyleSheet.create({
     btnText: {
         color: 'darkslateblue',
         fontSize: 20,
-        textAlign: 'center'
+        textAlign: 'center',
     },
     btnTextWithIcon: {
         color: 'darkslateblue',
@@ -109,6 +115,7 @@ const styles = StyleSheet.create({
     btn: {
         backgroundColor: '#c2bad8',
         padding: 8,
-        margin: 5
+        margin: 5,
+        justifyContent: 'space-around'
     },
 });
